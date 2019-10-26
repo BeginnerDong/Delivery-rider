@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<title>登录</title>
+		<script src="./js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" type="text/css" href="css/login.css">
+	</head>
+
+<body>
+	<div id="app">
+		<!-- 标题 -->
+		<div class="T-head line50 center fs16 Tfix-head">
+			&nbsp;
+		</div>
+		<div class="h50"></div>
+		
+		<div>
+			<image style="width: 100%; height: auto; display: block;padding-bottom:40px;" src="images/registered-img.png" mode=""></image>
+		</div>
+		
+		<div class="pub_editInfor pdlr4">
+			<div class="item flexCenter">
+				<div class="name"><img class="icon" src="images/registered-icon.png" ></div>
+				<div class="rr bordB1">
+					<input type="text" value="" placeholder="请输入手机号"/>
+				</div>
+			</div>
+			<div class="item flexCenter">
+				<div class="name"><img class="icon" src="images/registered-icon1.png" ></div>
+				<div class="rr bordB1">
+					<input type="text" value="" placeholder="请输入登录密码"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="submitbtn" style="margin-top: 80px;">
+			<a class="btn flexCenter w"  href="index.html" style="margin-bottom: 0;">登录</a>
+			<p style="margin: 5px 10%;"><a class="fs12 color6" href="forgetPswd.html">忘记密码？</a></p>
+			
+		</div>
+	</div>
+</body>
+	
+<script type="text/javascript">
+	var app = new Vue({
+		    el: '#app',
+		    data:function(){
+		        return {
+					is_show:false,
+					mainData: []
+		        }
+		    },
+		    onLoad() {
+		    	const self = this;
+		    	// self.$Utils.loadAll(['getMainData'], self);
+		    },
+		    methods: {
+				
+				getMainData() {
+					const self = this;
+					const postData = {};
+					postData.tokenFuncName = 'getProjectToken';
+					var callback = function(res){
+					    console.log('getMainData', res);
+					    self.mainData.push.apply(self.mainData,res.info.data);		        
+					};
+					self.$apis.orderGet(postData, callback);
+				}
+		    }
+		});
+</script>
+</html>

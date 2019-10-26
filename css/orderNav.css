@@ -1,0 +1,8 @@
+
+
+/* 切换导航 */
+.orderNav{display: flex; justify-content: space-between; align-items: center; height: 40px;padding: 0 4%; }
+.orderNav .tt{ width: 50%;color: #666;  text-align: center; line-height:40px;}
+.orderNav .on{ color: #2fa0ed; position: relative;}
+.orderNav .on::after{content: ""; width: 60px; height: 3px;background: #2fa0ed; position: absolute; bottom: 0;left: 50%;transform: translateX(-50%);}
+

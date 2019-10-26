@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<title>银行卡绑定</title>
+		<script src="./js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" type="text/css" href="css/bankInfor.css">
+	</head>
+
+
+<body>
+	<div id="app">
+		<!-- 标题 -->
+		<div class="T-head line50 center fs16 Tfix-head">
+			<a class="back-next pa" href="javascript:history.go(-1);"><img class="icon" src="images/backIcon.png" ></a>银行卡绑定
+		</div>
+		<div class="h50"></div>
+		
+		<div class="bankInfor">
+			<ul>
+				<li class="flexRowBetween">
+					<div class="name fs13">银行卡开户名：</div>
+					<div class="right flexEnd">
+						<input type="text" value="" placeholder="请输入银行卡开户名">
+					</div>
+				</li>
+				<li class="flexRowBetween">
+					<div class="name fs13">选择银行：</div>
+					<div class="right flexEnd">
+						<select>
+							<option value ="请选择">请选择</option>
+							<option value ="">中国银行</option>
+							<option value ="">西安银行</option>
+							<option value ="">交通银行</option>
+						</select>
+					</div>
+				</li>
+				<li class="flexRowBetween">
+					<div class="name fs13">银行卡卡号：</div>
+					<div class="right flexEnd">
+						<input type="number" value="" placeholder="请输入银行卡卡号" onkeyup="this.value=this.value.replace(/\D/g,'')"  maxlength="11">
+					</div>
+				</li>
+				<li class="flexRowBetween">
+					<div class="name fs13">手机号：</div>
+					<div class="right flexEnd">
+						<input type="number" value="" placeholder="请输入您银行卡绑定的手机号" onkeyup="this.value=this.value.replace(/\D/g,'')"  maxlength="11">
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="submitbtn" style="margin-top: 100px;">
+			<button class="btn" href="#">保存</button>
+		</div>
+		
+	</div>
+</body>
+
+	
+<script type="text/javascript">
+	var app = new Vue({
+		    el: '#app',
+		    data:function(){
+		        return {
+					is_show:false,
+					mainData: []
+		        }
+		    },
+		    onLoad() {
+		    	const self = this;
+		    	// self.$Utils.loadAll(['getMainData'], self);
+		    },
+		    methods: {
+				
+				getMainData() {
+					const self = this;
+					const postData = {};
+					postData.tokenFuncName = 'getProjectToken';
+					var callback = function(res){
+					    console.log('getMainData', res);
+					    self.mainData.push.apply(self.mainData,res.info.data);		        
+					};
+					self.$apis.orderGet(postData, callback);
+				}
+		    }
+		});
+	</script>
+
+
+</html>

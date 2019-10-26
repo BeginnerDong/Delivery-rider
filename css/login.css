@@ -1,0 +1,7 @@
+
+.pub_editInfor .item{ width: 90%;margin: 0 auto;line-height: 20px;padding-bottom: 10px; display: flex;justify-content: flex-start;box-sizing: border-box; align-items: center;}
+.pub_editInfor .item .name .icon{width: 20px; height: 20px; display: block;}
+.pub_editInfor .item .rr{ width: 90%;padding:10px 0;box-sizing: border-box;}
+.pub_editInfor .item .rr input{width: 100%;box-sizing: border-box;padding: 0px 10px; font-size: 13px;}
+
+

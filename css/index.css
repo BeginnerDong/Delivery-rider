@@ -1,0 +1,55 @@
+@charset "UTF-8";
+/**
+ * \(^o^)/~
+ * @authors Your Name (you@example.org)
+ * @date    2019-10-9 11:19:16
+ * @version $Id$
+ */
+
+
+/*  */
+.orderList li{background: #fff; border-radius: 8px; margin-top: 15px;padding-bottom: 15px;box-shadow: 0 0 8px rgba(0,0,0,0.1);}
+.orderList li .infor{display: block;}
+.orderList li .datt{padding: 10px; font-size: 12px;} 
+.orderList li .state{color: #ff3b3b;}
+.orderList li .beizhu{padding: 10px;background: #f8f8f8; color: #666;}
+.orderList li .adrsTwo .line{margin-bottom: 8px;}
+.orderList li .adrsTwo .range{width: 50px;}
+.orderList li .adrsTwo .dian{width: 6px; height: 6px; border-radius: 50%;margin: 0 8px 0 5px;}
+.orderList li .adrsTwo .dian.green{ background: #13af42;}
+.orderList li .adrsTwo .dian.red{ background: #f01a1c;}
+.orderList li .adrsTwo .adrsMs{width:80%; display: flex; flex-wrap: wrap; justify-content: flex-start;}
+.orderList li .adrsTwo .labBtn{ padding: 0 10px; height: 20px;text-align: center; line-height: 20px;border: 1px solid #2FA0ED; border-radius: 3px; color: #2FA0ED; display: block;}
+
+.orderList li .msg{display: flex; flex-direction: column;padding: 10px 10px;background: #f8f8f8; color: #898989;}
+.orderList li .msg .child{padding:5px 0 ;}
+
+.orderList li .msg span.tit{width:60%;}
+.orderList li .msg span.mny{width: 25%; text-align: right;}
+.orderList li .msg span.num{width:15%; text-align: center;}
+.orderList li .underBtn{ display: flex; justify-content: flex-end;}
+.orderList li .Bbtn{display: block; width: 70px; padding: 0 5px; line-height: 24px; border:1px solid #2FA0ED; color: #666;text-align: center; margin-left: 15px; border-radius:20px; font-size: 12px;box-sizing: border-box;}
+
+.orderList li .sdBtn{width: 100px; height: 35px; line-height: 35px; text-align: center; color: #fff; background: #2FA0ED;font-size:14px;  display:block;border-radius: 5px;}
+
+
+/* 左侧-个人中心 */
+.left-homeNav{width:80%; position: fixed; top:0px;bottom: 0; left:0; z-index: 90;box-sizing: border-box;}
+.nav-blackbj{width: 100%; background:rgba(0,0,0,0.3);position: fixed; top:0px;bottom: 0; left:0;right: 0; z-index: 89;box-sizing: border-box;}
+.XlineNav{width:100%;height: 100%;  background: #fff;padding:15px; position: relative;z-index: 95; box-sizing: border-box;}
+.XlineNav .info{width: 100%;padding: 15px 0;box-sizing: border-box;border-bottom: solid 1px #eee;box-sizing: border-box;}
+.XlineNav .icon{width: 18px;height: 18px;margin-right: 10px; display: block;}
+.XlineNav .info .right{display: flex; justify-content: flex-end; align-items: center;}
+.XlineNav .userInfor{width: 90%;}
+.XlineNav .userPhoto{width: 55px; height: 55px; border-radius: 50%;}
+.XlineNav .userPhoto img{width: 100%; height: 100%; display: block;}
+.XlineNav .Msg{width: 70%;}
+
+/* 开关按钮 */
+.chooseBtn{display: none;}
+.choose-label{box-shadow: #ccc 0px 0px 0px 1px;width: 40px;height: 20px;display: inline-block;border-radius: 20px;position: relative;background-color: #bdbdbd;overflow: hidden;}
+.choose-label:before{content: '';position: absolute;left: 0;width: 20px;height: 20px;display: inline-block;border-radius: 20px;background-color: #fff;z-index: 20;-webkit-transition: all 0.5s;transition: all 0.5s;}
+.chooseBtn:checked + label.choose-label:before{left: 20px;}
+.chooseBtn:checked + label.choose-label{background-color: #2FA0ED;}
+
+

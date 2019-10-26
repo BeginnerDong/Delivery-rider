@@ -1,0 +1,19 @@
+
+.fx_lableBtn{ display: block;padding: 0 10px;  line-height: 22px;border-radius: 20px 0 0 20px;background: #2FA0ED; color: #fff; font-size: 12px; position: absolute; right: 0; top:9px;;}
+.Toptit .icon{ width:15px; height: 15px; display: block;margin-right: 10px;}
+.orederDetal li{padding: 10px 0; border-bottom:1px solid #eee;}	
+.orederDetal li:last-child{border-bottom: 0;}
+.orederDetal .msgLis .tit{width:60%; color: #666;}
+.orederDetal .msgLis .specs{width:40%; color: #666;}
+.orederDetal .msgLis .num{width:40%; text-align: center;}
+.orederDetal .msgLis .mny{width: 60%; text-align: right;}
+/* 位置信息 */
+.GprsMsg .item .adrs{width: 90%;position: relative;box-sizing: border-box;padding-left: 15px;}
+
+.GprsMsg .item .dian{width: 6px; height: 6px;border-radius: 50%;position: absolute; top: 50%;left: 0;transform: translateY(-50%);background: #009944;}
+.GprsMsg .item .dian.red{background: #FF3B3B;}
+.GprsMsg .item .Ricon{width: 16px; height: 16px; display: block;}
+
+
+.detal_b_bar{width: 100%;background: #fff;box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);position: fixed;bottom: 0;left: 0;right: 0; z-index: 99;box-sizing: border-box;}
+div.detal_b_bar .btn{width: 60%;margin: 15px auto;}
