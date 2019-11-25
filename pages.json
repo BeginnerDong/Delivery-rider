@@ -1,0 +1,191 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",//设置页面标题文字
+				"onReachBottomDistance":100,
+				"navigationStyle":"custom" //标题隐藏
+			}
+		},
+		{
+			"path": "pages/forgetPswd/forgetPswd",
+			"style": {
+				"navigationBarTitleText": "",//设置页面标题文字
+				"onReachBottomDistance":100,
+				"navigationStyle":"custom" //标题隐藏
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",//设置页面标题文字
+				"onReachBottomDistance":100,
+				"navigationStyle":"custom" //标题隐藏
+			}
+		},
+		{
+			"path": "pages/myBankCard/myBankCard",
+			"style": {
+				"navigationBarTitleText": "银行卡管理",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myBankCard_add/myBankCard_add",
+			"style": {
+				"navigationBarTitleText": "银行卡绑定",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myBankCard_edit/myBankCard_edit",
+			"style": {
+				"navigationBarTitleText": "银行卡编辑",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myCashOut/myCashOut",
+			"style": {
+				"navigationBarTitleText": "提现",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myExtension/myExtension",
+			"style": {
+				"navigationBarTitleText": "我的推广",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myExtension_share/myExtension_share",
+			"style": {
+				"navigationBarTitleText": "分享",//设置页面标题文字
+				"onReachBottomDistance":100,
+				"navigationStyle":"custom" //标题隐藏
+			}
+		},
+		{
+			"path": "pages/myIncome/myIncome",
+			"style": {
+				"navigationBarTitleText": "我的收入",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myNotice/myNotice",
+			"style": {
+				"navigationBarTitleText": "通知中心",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myNotice_Detail/myNotice_Detail",
+			"style": {
+				"navigationBarTitleText": "通知详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myOrder/myOrder",
+			"style": {
+				"navigationBarTitleText": "我的订单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetail_Agency/orderDetail_Agency",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetail_daimai/orderDetail_daimai",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetail_fetchDeliver/orderDetail_fetchDeliver",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetail_sameDay/orderDetail_sameDay",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetail_waimai/orderDetail_waimai",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetailTwo_Agency/orderDetailTwo_Agency",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetailTwo_daimai/orderDetailTwo_daimai",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetailTwo_fetchDeliver/orderDetailTwo_fetchDeliver",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetailTwo_sameDay/orderDetailTwo_sameDay",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/orderDetailTwo_waimai/orderDetailTwo_waimai",
+			"style": {
+				"navigationBarTitleText": "订单详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/userInfor/userInfor",
+			"style": {
+				"navigationBarTitleText": "基本信息",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		}
+		
+	],
+	
+	"globalStyle": {
+		"navigationBarTextStyle": "white",//导航栏文字蓝色
+		"navigationBarTitleText": "配送小程序-骑手端",
+		"navigationBarBackgroundColor": "#2fa0ed"
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

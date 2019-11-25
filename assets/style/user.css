@@ -1,0 +1,20 @@
+
+
+.myExtendTop{width: 100%; text-align: center;box-sizing: border-box;padding: 20px 4% 60px 4%; background: #2FA0ED;}
+.myExtendTop .bigNum{font-size: 30px; line-height:30px;}
+.myExtendTop .txBtn{ width: 100px; height: 30px;line-height: 30px; background: #fff; color: #2FA0ED; border-radius: 3px; margin: 0 auto;font-size: 13px; display: block;}
+
+/* 总数量显示 */
+.jifenTwoNum{background: #fff; margin-top: -25px;padding: 10px 10px; margin:-38px 4% 10px 4%;}
+.jifenTwoNum .item{width: 50%;text-align: center;}
+.jifenTwoNum .item:first-child{border-right: 1px solid #eee;}
+.jifenTwoNum .item .arrow{width: 9px; height: 5px; display: block;margin-left: 3px;}
+
+/* 信息RowBetween */
+.orderBetween .item{ padding: 10px 4%;border-bottom: 1px solid #eee;background: #fff;}
+.orderBetween .item .left{width: 70%;}
+.orderBetween .item .right{width: 30%; text-align: right;}
+.orderBetween .item .left .tex2{padding-left:18px;position: relative;line-height: 18px;}
+.orderBetween .item .left .tex2 .icon{width: 15px; height: 15px; display: block; background: url(../../static/images/the_order-icon.png) no-repeat 0 0/100% 100%; position: absolute; top:50%; left: 0; transform: translateY(-50%);}
+
+.orderBetween .item .left .photo{width: 40px; height: 40px;border-radius: 50%; display: block;margin-right: 10px;}

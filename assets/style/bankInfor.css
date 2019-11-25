@@ -1,0 +1,10 @@
+
+/* 银行卡编辑 */
+.bankInfor li{padding: 10px 4%;border-bottom: 1px solid #eee; background: #fff;}
+
+.bankInfor li .name{width: 35%;}
+.bankInfor li .right{width: 65%; font-size: 13px;} 
+.bankInfor li input{ width: 100%; height: 36px; line-height: 36px; display: block;text-align: right;font-size: 13px;}
+.bankInfor li .right select{border: 0; color: #666;}
+.bankInfor li .right option {border: 0;}
+.bankInfor li .yamTest{ color: #FE3759;}
