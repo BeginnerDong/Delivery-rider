@@ -15,10 +15,10 @@
 			<div class="tt" :class="current==2?'on':''" @click="change('2')">待送达</div>
 		</div>
 		
-		<div class="orderList pdlr4" style="margin-top: 55px;" v-show="current==1">
+		<div class="orderList pdlr4" style="margin-top: 55px;" v-if="userData.is_work==1">
 			<ul>
 				<!-- 外卖送餐 -->
-				<li>
+				<!-- <li>
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14">剩余接单时间5分钟</h1>
 						<div class="price flexEnd"  @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
@@ -54,281 +54,56 @@
 					<div class="submitbtn mgt20 pdlr4">
 						<button class="Wbtn" @click="deltAlert">抢单</button>
 					</div>
-				</li>
+				</li> -->
 				
 				<!-- 代买 -->
-				<li>
+				<li v-for="(item,index) in mainData" :key="index">
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
-					<a class="infor mglr4" @click="Router.navigateTo({route:{path:'/pages/orderDetail_daimai/orderDetail_daimai'}})">
+					<a class="infor mglr4" 
+					@click="toDetail(item.type,item.id)">
 						<div class="pdtb10 adrsTwo">
 							<p class="flex line">
 								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
+								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
-							<p class="flex line">
+							<p class="flex line" v-if="item.type!=2">
 								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
+								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
 								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">代买</em></span>
+								<span class="adrsMs">
+									<em class="labBtn fs12" v-if="item.type==1">取送件</em>
+									<em class="labBtn fs12" v-if="item.type==2">代办</em>
+									<em class="labBtn fs12" v-if="item.type==3">代买</em>
+									<em class="labBtn fs12" v-if="item.type==4">当日达</em>
+								</span>
 							</p>
 						</div>
 					</a>
 					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20">
-							<button class="Wbtn" @click="deltAlert">抢单</button>
+						<div class="beizhu mgb15" v-if="item.passage1!=''">{{item.passage1}}</div>
+						<div class="submitbtn mgt20" v-if="item.transport_status==0">
+							<button class="Wbtn" @click="deltAlert(index)">抢单</button>
+						</div>
+						<div class="submitbtn mgt20 pdlr4 flexEnd" v-if="item.transport_status==1">
+							<button class="sdBtn" @click="confirm(index)">确认送达</button>
 						</div>
 					</div>
 				</li>
 				
-				<!-- 当日达 -->
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4"  @click="Router.navigateTo({route:{path:'/pages/orderDetail_sameDay/orderDetail_sameDay'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">当日达</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20">
-							<button class="Wbtn" @click="deltAlert">抢单</button>
-						</div>
-					</div>
-				</li>
-				
-				<!-- 取送件 -->
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4"  @click="Router.navigateTo({route:{path:'/pages/orderDetail_fetchDeliver/orderDetail_fetchDeliver'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">取送件</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20">
-							<button class="Wbtn" @click="deltAlert">抢单</button>
-						</div>
-					</div>
-				</li>
-				
-				<!-- 代办 -->
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4"  @click="Router.navigateTo({route:{path:'/pages/orderDetail_Agency/orderDetail_Agency'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">代办</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20">
-							<button class="Wbtn" @click="deltAlert">抢单</button>
-						</div>
-					</div>
-				</li>
 			</ul>
 		</div>
-		
-		<!-- 待送达内容 -->
-		<div class="orderList pdlr4" style="margin-top: 55px;" v-show="current==2">
-			<ul>
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd"  @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4" @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_waimai/orderDetailTwo_waimai'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">外卖送餐</em></span>
-							</p>
-						</div>
-						<div class="msg pr radius5 fs12">
-							<p class="child  flexRowBetween">
-								<span class="tit avoidOverflow">韩国泡菜</span>
-								<span class="num">×1</span>
-								<span class="mny">￥21.0</span>
-							</p>
-							<p class="child  flexRowBetween">
-								<span class="tit avoidOverflow">牛肉土豆饼</span>
-								<span class="num">×1</span>
-								<span class="mny">￥4.0</span>
-							</p>
-						</div>
-					</a>
-					<div class="submitbtn mgt20 pdlr4 flexEnd">
-						<button class="sdBtn" @click="sdSuccessShow">确认送达</button>
-					</div>
-				</li>
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4"  @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_daimai/orderDetailTwo_daimai'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">代买</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20 pdlr4 flexEnd">
-							<button class="sdBtn" @click="sdSuccessShow">确认送达</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4" @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_sameDay/orderDetailTwo_sameDay'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">当日达</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20 pdlr4 flexEnd">
-							<button class="sdBtn" @click="sdSuccessShow">确认送达</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4"  @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_fetchDeliver/orderDetailTwo_fetchDeliver'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">取送件</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20 pdlr4 flexEnd">
-							<button class="sdBtn" @click="sdSuccessShow">确认送达</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd" @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
-					</div>
-					<a class="infor mglr4" @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_Agency/orderDetailTwo_Agency'}})">
-						<div class="pdtb10 adrsTwo">
-							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
-							</p>
-							<p class="flex line">
-								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
-								<span class="adrsMs"><em class="labBtn fs12">代办</em></span>
-							</p>
-						</div>
-					</a>
-					<div class="pdlr4">
-						<div class="beizhu mgb15">帮忙送狗粮</div>
-						<div class="submitbtn mgt20 pdlr4 flexEnd">
-							<button class="sdBtn" @click="sdSuccessShow">确认送达</button>
-						</div>
-					</div>
-				</li>
-			</ul>
+		<div class="orderList pdlr4" style="margin-top: 55px;text-align: center;" v-else>
+			快去上班接单吧~
 		</div>
-		
 		<!-- 费用明细弹框 -->
 		<div class="black-bj" v-show="is_show"></div>
 		<div class="fxmxShow" v-show="is_moneyMxShow">
-			<div class="colseBtn" @click="moneyMxShow">×</div>
+			<div class="colseBtn" @click="moneyMxClose">×</div>
 			<div class="center line40">费用明细</div>
 			<div class="infor fs12 color6">
 				<p class="flexRowBetween" v-for="(item,index) in moneyMxDate">
@@ -341,11 +116,11 @@
 		<!-- 确认抢这单？ -->
 		<div class="xieyiAlert" v-if="is_deltAlertShow">
 			<div class="infor center radius5" style="padding:40px 30px;height: auto;">
-				<div class="colseBtn"  @click="deltAlert" >×</div>
+				<div class="colseBtn"  @click="deltAlertClose" >×</div>
 				<div class="tit font16 pdb30">确认抢这一单</div>
 				<div class="btnB flexRowBetween">
-					<div @click="deltAlert">否</div>
-					<div class="on">是</div>
+					<div @click="deltAlertClose">否</div>
+					<div class="on" @click="orderUpdate()">是</div>
 				</div>
 			</div>
 		</div>
@@ -355,7 +130,8 @@
 			<div class="c5Rclose" @click="sdSuccessShow">×</div>
 			<div class="pdt30">送货成功，辛苦了~</div>
 			<div class="submitbtn mgt40">
-				<button class="btn" type="button" style="width: 100px;height: 35px; line-height: 35px;" @click="sdSuccessShow">确定</button>
+				<button class="btn" type="button" style="width: 100px;height: 35px; line-height: 35px;" 
+				@click="sdSuccessShow">确定</button>
 			</div>
 		</div>
 		
@@ -366,10 +142,15 @@
 			<div class="XlineNav">
 				<div class="info flexRowBetween">
 					<div class="flex userInfor">
-						<div class="userPhoto mgr15"><img src="../../static/images/about-img.png" ></div>
+						<div class="userPhoto mgr15" style="overflow: hidden;" v-if="userData.info&&userData.info.mainImg&&userData.info.mainImg[0]">
+							<img :src="userData.info.mainImg[0].url" >
+						</div>
+						<div class="userPhoto mgr15" style="overflow: hidden;" v-else>
+							<img src="../../static/images/about-img.png" >
+						</div>
 						<div class="Msg">
-							<p class="mgb5">设置昵称</p>
-							<p class="fs13">15623562135</p>
+							<p class="mgb5">{{userData.info?userData.info.name:''}}</p>
+							<p class="fs13">{{userData.info?userData.info.phone:''}}</p>
 						</div>
 					</div>
 					<a class="right pdtb10" style="width: 10%;" @click="Router.navigateTo({route:{path:'/pages/userInfor/userInfor'}})">
@@ -382,7 +163,7 @@
 						<span class="tt">开启接单/关闭收工</span>
 					</div>
 					<div class="right">
-						<switch checked="true" style="transform:scale(0.75)"/>
+						<switch @change="userUpdate" :checked="userData.is_work==1?true:false" style="transform:scale(0.75)"/>
 					</div>
 				</div>
 				<div class="info">
@@ -446,55 +227,272 @@
 				current:1,
 				is_moneyMxShow:false,
 				moneyMxDate:[
-					{title:'基础配送费',price:'￥9'},
-					{title:'距离附加',range:'2.9公里',price:'￥2.5'},
-					{title:'重量附加',range:'3.0公斤',price:'￥5'},
-					{title:'小费',price:'￥5'},
-					{title:'总计',price:'￥21.5'}
+					
 				],
 				is_deltAlertShow:false,
 				is_sdSuccess:false,
-				is_homeNav:false
+				is_homeNav:false,
+				searchItem:{
+					thirdapp_id:['in',[2,3]],
+					user_type:0,
+					transport_status:0,
+				},
+				userData:{},
+				willId:''
 			}
 		},
+		
 		onLoad() {
 			const self = this;
 			// self.$Utils.loadAll(['getMainData'], self);
 		},
+		
+		onShow() {
+			const self = this;
+			self.$Utils.loadAll(['getUserInfoData','getLocation'], self);
+		},
+		
 		methods: {
+			
+			getLocation(){
+				const self = this;
+				uni.getLocation({
+				    type: 'wgs84',
+				    success: function (res) {
+				        console.log('当前位置的经度：' + res.longitude);
+				        console.log('当前位置的纬度：' + res.latitude);
+				    }
+				});
+				self.$Utils.finishFunc('getLocation');
+			},
+			
+			
+			toDetail(type,id){
+				const self = this;
+				if(type==1){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_fetchDeliver/orderDetail_fetchDeliver?id='+id}})
+				}else if(type==2){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_Agency/orderDetail_Agency?id='+id}})
+				}else if(type==3){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_daimai/orderDetail_daimai?id='+id}})
+				}else if(type==4){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_sameDay/orderDetail_sameDay?id='+id}})
+				}
+			},
+			
+			
+			confirm(index) {
+				const self = this;
+				var now = Date.parse(new Date())/1000;
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					id:self.mainData[index].id,
+					user_type:0
+				};
+				postData.data = {
+					transport_status:3,
+					finish_time:now
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+						self.sdSuccessShow();
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
+			orderUpdate() {
+				const self = this;
+				
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					id:self.willId,
+					user_type:0
+				};
+				postData.data = {
+					transport_status:1,
+					rider_no:self.userData.user_no
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+						self.deltAlertClose();
+						self.$Utils.showToast('接单成功', 'none')
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
+			userUpdate(e) {
+				const self = this;
+				console.log('switch1 发生 change 事件，携带值为', e.target.value)
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					user_no:uni.getStorageSync('riderInfo').user_no
+				};
+				postData.data = {};
+				if(e.target.value){
+					postData.data.is_work = 1
+				}else{
+					postData.data.is_work = 0
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+						self.is_homeNav = false;
+						self.getUserInfoData()
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.userUpdate(postData, callback);
+			},
+			
+			getUserInfoData() {
+				const self = this;
+				console.log('852369')
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id:2,
+				};
+				postData.tokenFuncName = 'getRiderToken';
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userData = res.info.data[0];
+						if(self.userData.is_work==1){
+							self.searchItem.city_id = self.userData.city_id;
+							self.getMainData(true)
+						}else{
+							self.$Utils.finishFunc('getUserInfoData');
+						}
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+				};
+				self.$apis.userGet(postData, callback);
+			},
+			
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 10
+					}
+				};
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getUserInfoData');
+				};
+				self.$apis.orderGet(postData, callback);
+			},
+			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
-					self.current = current
+					self.current = current;
+					if(self.current==1){
+						delete self.searchItem.rider_no;
+						self.searchItem.transport_status = 0;
+					}else if(self.current==2){
+						self.searchItem.transport_status = 1;
+						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no
+					};
+					if(self.userData.is_work==1){
+						self.getMainData(true)
+					}
 				}
 			},
-			moneyMxShow(){
+			
+			moneyMxClose(){
 				const self = this;
+				self.moneyMxDate = [];
 				self.is_show = !self.is_show
 				self.is_moneyMxShow = !self.is_moneyMxShow
 			},
-			deltAlert(){
+			
+			moneyMxShow(index){
 				const self = this;
+				self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData[index].main_price});
+				if(parseFloat(self.mainData[index].distance_price)>0){
+					self.moneyMxDate.push({title:'距离附加费',price:'￥'+self.mainData[index].distance_price})
+				};
+				if(parseFloat(self.mainData[index].weight_price)>0){
+					self.moneyMxDate.push({title:'重量附加费',price:'￥'+self.mainData[index].weight_price})
+				};
+				if(parseFloat(self.mainData[index].night_price)>0){
+					self.moneyMxDate.push({title:'夜间配送费',price:'￥'+self.mainData[index].night_price})
+				};
+				if(parseFloat(self.mainData[index].weather_price)>0){
+					self.moneyMxDate.push({title:'恶劣天气附加费',price:'￥'+self.mainData[index].weather_price})
+				};
+				if(parseFloat(self.mainData[index].holiday_price)>0){
+					self.moneyMxDate.push({title:'节假日附加费',price:'￥'+self.mainData[index].holiday_price})
+				};
+				if(parseFloat(self.mainData[index].rush_price)>0){
+					self.moneyMxDate.push({title:'高峰时段附加费',price:'￥'+self.mainData[index].rush_price})
+				};
+				if(parseFloat(self.mainData[index].insured_price)>0){
+					self.moneyMxDate.push({title:'保价费',price:'￥'+self.mainData[index].insured_price})
+				};
+				if(parseFloat(self.mainData[index].gratuity)>0){
+					self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData[index].gratuity})
+				};
+				self.moneyMxDate.push({title:'总计',price:'￥'+self.mainData[index].price})
+				self.is_show = !self.is_show
+				self.is_moneyMxShow = !self.is_moneyMxShow
+			},
+			
+			deltAlertClose(){
+				const self = this;
+				self.is_deltAlertShow = false;
+			},
+			
+			deltAlert(index){
+				const self = this;
+				self.willId = self.mainData[index].id;
 				self.is_deltAlertShow=!self.is_deltAlertShow;
 			},
+			
 			sdSuccessShow(){
 				const self = this;
 				self.is_sdSuccess=!self.is_sdSuccess;
 			},
+			
 			homeNavShow(){
 				const self = this;
 				self.is_homeNav=!self.is_homeNav;
 			},
-			getMainData() {
-				const self = this;
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				var callback = function(res){
-				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
-				};
-				self.$apis.orderGet(postData, callback);
-			}
+			
 		},
 	}
 </script>

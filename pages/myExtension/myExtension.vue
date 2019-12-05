@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">566.9<em class="fs12">元</em></div>
+			<div class="bigNum pd10">{{userInfoData.balance}}<em class="fs12">元</em></div>
 			<div class="yuan pdb20 fs13">奖励余额</div>
 			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut'}})">提现</a>
 		</div>
 		<div class="orderBetween" >
-			<div class="item flexRowBetween" v-for="(item,index) in orderOkData" :key="index">
+			<div class="item flexRowBetween" v-for="(item,index) in mainData" :key="index">
 				<div class="left color6 flex">
 					<div><img class="photo" src="../../static/images/promote-icon.png" ></div>
 					<div class="photoName">
@@ -15,7 +15,7 @@
 					</div>
 				</div>
 				<div class="right flexEnd">
-					<p class="red">+￥5.2</p>
+					<p class="red">+￥{{item.count}}</p>
 				</div>
 			</div>
 		</div>
@@ -36,32 +36,81 @@
 				Router:this.$Router,
 				showView: false,
 				is_show:false,
-				mainData: [],
+			
 				orderOkData:[{},{},{}],
-				current:1
+				current:1,
+				searchItem:{
+					type:2,
+					status:['in',[0,1]],
+					bahavior:2
+				},
+				userInfoData:{},
+				mainData:[],
+				paginate:{
+					count: 0,
+					currentPage: 1,
+					pagesize: 10,
+					is_page: true,
+				},
 			}
 		},
-		onLoad() {
+		
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.paginate);
+			//self.$Utils.loadAll(['getMainData'], self)
+		
 		},
+			
+		onShow() {
+			const self =  this;
+			self.getUserInfoData();
+			self.getMainData(true);
+		},
+		
 		methods: {
-			change(current) {
+			getUserInfoData() {
 				const self = this;
-				if(current!=self.current){
-					self.current = current
-				}
-			},
-			getMainData() {
-				const self = this;
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				var callback = function(res){
-				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
+				console.log('852369')
+				const postData = {
+					searchItem:{}
 				};
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.tokenFuncName = 'getRiderToken'
+				postData.searchItem.user_no = uni.getStorageSync('riderInfo').user_no		
+				
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userInfoData = res.info.data[0];
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						pagesize: 10,
+						is_page: true,
+					};
+				};
+				const postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				postData.tokenFuncName = 'getRiderToken'
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log(self.mainData)
+				};
+				self.$apis.flowLogGet(postData, callback);
+			},
 		},
 	}
 </script>

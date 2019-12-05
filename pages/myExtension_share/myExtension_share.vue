@@ -4,7 +4,7 @@
 		<div class="sharebox">
 			<a class="back-next pa" href="javascript:history.go(-1);"><img class="icon" src="../../static/images/backIcon.png" ></a>
 			<img class="bigPic" src="../../static/images/img.png" >
-			<img class="ewm" src="../../static/images/ewm_icon.png" >
+			<img class="ewm" :src="userInfoData.qrCode" >
 		</div>
 		
 	</div>
@@ -16,31 +16,37 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				is_show:false
+				
+				userInfoData:{}
 			}
 		},
+		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getUserInfoData'], self);
 		},
+		
 		methods: {
-			change(current) {
+			
+			getUserInfoData() {
 				const self = this;
-				if(current!=self.current){
-					self.current = current
-				}
-			},
-			getMainData() {
-				const self = this;
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				var callback = function(res){
-				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
+				console.log('852369')
+				const postData = {
+					searchItem:{}
 				};
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.tokenFuncName = 'getRiderToken'
+				postData.searchItem.user_no = uni.getStorageSync('riderInfo').user_no		
+				
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userInfoData = res.info.data[0];
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+					self.$Utils.finishFunc('getUserInfoData');
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
 		},
 	}
 </script>

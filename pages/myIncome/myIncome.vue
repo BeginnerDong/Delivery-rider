@@ -2,7 +2,7 @@
 	<div>
 		
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">566.9</div>
+			<div class="bigNum pd10">{{userInfoData.balance}}</div>
 			<div class="yuan pdb20 fs13">收益(元)</div>
 			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut'}})">提现</a>
 		</div>
@@ -12,33 +12,19 @@
 			<div class="tt" :class="current==2?'on':''" @click="change('2')">配送收入</div>
 		</div>
 		
-		<div class="orderBetween" v-show="current==1">
-			<div class="item" v-for="(item,index) in orderOkData" :key="index">
-				<a class="flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_waimai/orderDetailTwo_waimai'}})">
+		<div class="orderBetween">
+			<div class="item" v-for="(item,index) in mainData" :key="index">
+				<a class="flexRowBetween">
 					<div class="left color6">
-						<p class="fs13">2019-10-26</p>
-						<p class="fs12">订单编号：12345668885656</p>
+						<p class="fs13">{{item.create_time}}</p>
+						<p class="fs12">订单编号：{{item.order_no}}</p>
 					</div>
 					<div class="right flexEnd">
-						<p class="red">+￥5.2</p>
+						<p class="red">+￥{{item.count}}</p>
 					</div>
 				</a>
 			</div>
 		</div>
-		<div class="orderBetween" v-show="current==2">
-			<div class="item" v-for="(item,index) in orderOkData" :key="index">
-				<a class="flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/orderDetailTwo_sameDay/orderDetailTwo_sameDay'}})">
-					<div class="left color6">
-						<p class="fs13">2019-10-25</p>
-						<p class="fs12">订单编号：15234562666556</p>
-					</div>
-					<div class="right flexEnd">
-						<p class="red">+￥8.0</p>
-					</div>
-				</a>
-			</div>
-		</div>
-		
 	</div>
 </template>
 
@@ -48,35 +34,111 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				is_show:false,
-				orderOkData:[{},{},{},{}],
+				rewardData:[
+					{},{},{}
+				],
+				searchItem:{
+					type:2,
+					status:['in',[0,1]],
+					bahavior:0
+				},
+				userInfoData:{},
+				mainData:[],
+				paginate:{
+					count: 0,
+					currentPage: 1,
+					pagesize: 10,
+					is_page: true,
+				},
 				current:1
 			}
 		},
-		onLoad() {
+		
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.paginate);
+			//self.$Utils.loadAll(['getMainData'], self)
+		
 		},
+			
+		onShow() {
+			const self =  this;
+			self.getUserInfoData();
+			self.getMainData(true);
+		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
+		
+			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
-					self.current = current
+					self.current = current;
+					if(self.current==1){
+						self.searchItem.behavior=0;
+						
+					}else if(self.current==2){
+						self.searchItem.behavior=1;
+					}
+					self.getMainData(true)
 				}
 			},
-			getMainData() {
+			
+			getUserInfoData() {
 				const self = this;
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				var callback = function(res){
-				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
+				console.log('852369')
+				const postData = {
+					searchItem:{}
 				};
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.tokenFuncName = 'getRiderToken'
+				postData.searchItem.user_no = uni.getStorageSync('riderInfo').user_no		
+				
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userInfoData = res.info.data[0];
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						pagesize: 10,
+						is_page: true,
+					};
+				};
+				const postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				postData.tokenFuncName = 'getRiderToken'
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log(self.mainData)
+				};
+				self.$apis.flowLogGet(postData, callback);
+			},
+
 		},
-	}
+	};
 </script>
 
 <style>

@@ -1,11 +1,8 @@
 <template>
 	<div>
 		<div class="xqTex_infor pdlr4 pdt15">
-			<div class="cont">
-				<p>通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明。</p>
-				<p>通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明。</p>
-				<p>通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明通知详情内容代办业务说明。</p>
-			</div>
+			<view class="content ql-editor" v-html="mainData.content">
+			</view>
 		</div>
 		
 	</div>
@@ -17,31 +14,74 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				is_show:false
+				
+				mainData:{}
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.id = options.id;
+			self.$Utils.loadAll(['getMainData'], self);
 		},
 		methods: {
-			change(current) {
-				const self = this;
-				if(current!=self.current){
-					self.current = current
-				}
-			},
+			
 			getMainData() {
 				const self = this;
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
+				postData.searchItem = {
+					id:self.id,
+				};
+				postData.getAfter ={
+					log:{
+						token:uni.getStorageSync('riderToken'),
+						tableName:'Log',
+						middleKey:'relation_id',
+						key:'id',
+						condition:'=',
+						searchItem:{
+							type:1,
+							status:1,
+						}
+					}
+				};
 				var callback = function(res){
 				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
+					if(res.info.data.length>0){
+						self.mainData = res.info.data[0];
+						if(self.mainData.log.length==0){
+							self.addLog()
+						};
+						const regex = new RegExp('<img', 'gi');
+						self.mainData.content = self.mainData.content.replace(regex, `<img style="max-width: 100%;"`);
+						self.$Utils.finishFunc('getMainData');
+					}      
 				};
-				self.$apis.orderGet(postData, callback);
+				self.$apis.messageGet(postData, callback);
+			},
+			
+			addLog() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.data = {
+					type:1,
+					title: '阅读记录',
+					relation_id: self.mainData.id,
+					user_no:uni.getStorageSync('riderInfo').user_no,
+					thirdapp_id:2,
+					user_type:1
+				};
+				var callback = function(res){
+					if (res.solely_code == 100000) {
+						console.log('已阅读')
+					  
+					} else {
+						self.$Utils.showToast(res.msg, 'none', 1000)
+					};
+				};
+				self.$apis.logAdd(postData, callback);
 			}
+			
 		},
 	}
 </script>

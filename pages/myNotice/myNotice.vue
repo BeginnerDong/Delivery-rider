@@ -3,14 +3,12 @@
 		
 		<div class="noticeList">
 			<ul>
-				<li @click="Router.navigateTo({route:{path:'/pages/myNotice_Detail/myNotice_Detail'}})">
-						<div class="L-icon pr"><em class="dian"></em></div>
-						<div class="text avoidOverflow3">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+				<li v-for="(item,index) in mainData" :data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/myNotice_Detail/myNotice_Detail?id='+$event.currentTarget.dataset.id}})">	
+					<div class="L-icon pr"><em  v-if="item.log&&item.log.length==0" class="dian"></em></div>
+					<div class="text avoidOverflow3">{{item.description}}</div>
 				</li>
-				<li @click="Router.navigateTo({route:{path:'/pages/myNotice_Detail/myNotice_Detail'}})">
-						<div class="L-icon pr"></div>
-						<div class="text avoidOverflow3">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
-				</li>
+				
 			</ul>
 		</div>
 		
@@ -23,33 +21,87 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				is_show:false
+				searchItem:{
+					type:1,
+				
+				},
+				userInfoData:{},
+				mainData:[],
+				paginate:{
+					count: 0,
+					currentPage: 1,
+					pagesize: 10,
+					is_page: true,
+				},
+				
 			}
 		},
-		onLoad() {
+		
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			//self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			//self.$Utils.loadAll(['getMainData'], self)
+		
 		},
+			
+		onShow() {
+			const self =  this;
+			
+			self.getMainData(true);
+			
+			
+		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
-			change(current) {
+			
+			
+			getMainData(isNew) {
 				const self = this;
-				if(current!=self.current){
-					self.current = current
-				}
-			},
-			getMainData() {
-				const self = this;
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				var callback = function(res){
-				    console.log('getMainData', res);
-				    self.mainData.push.apply(self.mainData,res.info.data);		        
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						pagesize: 10,
+						is_page: true,
+					};
 				};
-				self.$apis.orderGet(postData, callback);
-			}
+				const postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				postData.getAfter ={
+					log:{
+						token:uni.getStorageSync('riderToken'),
+						tableName:'Log',
+						middleKey:'id',
+						key:'relation_id',
+						condition:'=',
+						searchItem:{
+							type:1,
+							status:1,
+						}
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log(self.mainData)
+				};
+				self.$apis.messageGet(postData, callback);
+			},
+
 		},
-	}
+	};
 </script>
 
 <style>

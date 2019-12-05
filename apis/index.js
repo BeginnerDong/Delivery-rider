@@ -17,6 +17,31 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	cardGet(param, callback) {
+		var allParams = {
+			url: 'Common/UserCard/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageGet(param, callback) {
+		var allParams = {
+			url: 'Common/Message/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 
 	registerSuper(param, callback) {
 
@@ -302,7 +327,18 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
-
+	
+	logAdd(param, callback) {
+		var allParams = {
+			url: 'Common/Log/add',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
 	login(param, callback) {
 
