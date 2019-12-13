@@ -21,7 +21,7 @@
 				<li class="flexRowBetween">
 					<div class="name fs13">银行卡卡号：</div>
 					<div class="right flexEnd">
-						<input type="number" v-model="submitData.number" placeholder="请输入银行卡卡号" onkeyup="this.value=this.value.replace(/\D/g,'')"  maxlength="11">
+						<input type="number" v-model="submitData.number" placeholder="请输入银行卡卡号" onkeyup="this.value=this.value.replace(/\D/g,'')">
 					</div>
 				</li>
 				<li class="flexRowBetween">

@@ -125,7 +125,7 @@
 						self.mainData = res.info.data[0];
 						self.moneyMxDate.push({title:'起步价',price:'￥'+self.mainData.main_price});
 						if(parseFloat(self.mainData.time_price)>0){
-							self.moneyMxDate.push({title:'时长附加',price:'￥'+self.mainData.gratuity})
+							self.moneyMxDate.push({title:'时长附加',price:'￥'+self.mainData.time_price})
 						};
 						if(parseFloat(self.mainData.gratuity)>0){
 							self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData.gratuity})

@@ -40,7 +40,7 @@
 				searchItem:{
 					type:2,
 					status:['in',[0,1]],
-					bahavior:0
+					behavior:0
 				},
 				userInfoData:{},
 				mainData:[],

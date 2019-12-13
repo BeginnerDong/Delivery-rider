@@ -10,67 +10,71 @@
 		</div>
 		<div class="h50"></div>
 		
-		<div class="orderNav boxShaow">
+		<div class="orderNav boxShaow" style="top:80px">
 			<div class="tt" :class="current==1?'on':''" @click="change('1')">新任务</div>
 			<div class="tt" :class="current==2?'on':''" @click="change('2')">待送达</div>
 		</div>
 		
-		<div class="orderList pdlr4" style="margin-top: 55px;" v-if="userData.is_work==1">
+		<div class="orderList pdlr4" style="margin-top: 85px;"  v-if="userData.is_work==1">
 			<ul>
 				<!-- 外卖送餐 -->
-				<!-- <li>
+				<li v-if="item.type==5||item.type==6" v-for="(item,index) in mainData" :key="index">
 					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
-						<div class="price flexEnd"  @click="moneyMxShow">26<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<h1 class="left fs14">剩余接单时间{{item.min}}分钟</h1>
+						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
-					<a class="infor mglr4" @click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai'}})">
+					<a class="infor mglr4" :data-id="item.id"
+					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
 						<div class="pdtb10 adrsTwo">
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
+								<em class="fs12 color6 ftn range">{{item.startDistance}}km</em><em class="dian green"></em>
+								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
-								<span class="adrsMs ftw">海威大厦2903九牧宠物店</span>
+								<em class="fs12 color6 ftn range">{{item.endDistance}}km</em><em class="dian red"></em>
+								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
 								<em class="fs12 color6 ftn range"></em><em class="dian"></em>
 								<span class="adrsMs"><em class="labBtn fs12">外卖送餐</em></span>
 							</p>
 						</div>
-						<div class="msg pr radius5 fs12">
+						
+						<div class="msg mglr10 pr radius5 fs12" v-if="item.type==5">
 							<p class="child  flexRowBetween">
-								<span class="tit avoidOverflow">韩国泡菜</span>
-								<span class="num">×1</span>
-								<span class="mny">￥21.0</span>
+								<span class="tit avoidOverflow">{{item.title}}</span>
+								<span class="num">×{{item.count}}</span>
+								<span class="mny">￥{{item.price}}</span>
 							</p>
-							<p class="child  flexRowBetween">
-								<span class="tit avoidOverflow">牛肉土豆饼</span>
-								<span class="num">×1</span>
-								<span class="mny">￥4.0</span>
+						</div>
+						<div class="msg mglr10 pr radius5 fs12" v-if="item.type==6">
+							<p class="child  flexRowBetween" v-for="c_item in item.child[0]">
+								<span class="tit avoidOverflow">{{c_item.title}}</span>
+								<span class="num">×{{c_item.count}}</span>
+								<span class="mny">￥{{c_item.unit_price}}</span>
 							</p>
 						</div>
 					</a>
 					<div class="submitbtn mgt20 pdlr4">
 						<button class="Wbtn" @click="deltAlert">抢单</button>
 					</div>
-				</li> -->
+				</li>
 				
 				<!-- 代买 -->
-				<li v-for="(item,index) in mainData" :key="index">
+				<li v-for="(item,index) in mainData" :key="index" v-if="item.type!=5">
 					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间5分钟</h1>
+						<h1 class="left fs14">剩余接单时间{{item.min}}分钟</h1>
 						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
 						<div class="pdtb10 adrsTwo">
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian green"></em>
+								<em class="fs12 color6 ftn range">{{item.startDistance}}km</em><em class="dian green"></em>
 								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
 							<p class="flex line" v-if="item.type!=2">
-								<em class="fs12 color6 ftn range">2.9km</em><em class="dian red"></em>
+								<em class="fs12 color6 ftn range">{{item.endDistance}}km</em><em class="dian red"></em>
 								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
@@ -139,7 +143,7 @@
 		<!-- 首页左侧菜单 -->
 		<div class="left-homeNav" v-show="is_homeNav">
 			<div class="nav-blackbj" @click="homeNavShow"></div>
-			<div class="XlineNav">
+			<div class="XlineNav" style="padding: 40px 15px;">
 				<div class="info flexRowBetween">
 					<div class="flex userInfor">
 						<div class="userPhoto mgr15" style="overflow: hidden;" v-if="userData.info&&userData.info.mainImg&&userData.info.mainImg[0]">
@@ -236,6 +240,7 @@
 					thirdapp_id:['in',[2,3]],
 					user_type:0,
 					transport_status:0,
+					level:0
 				},
 				userData:{},
 				willId:''
@@ -259,11 +264,35 @@
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
+						self.melongitude = res.longitude;
+						self.melatitude = res.latitude;
 				        console.log('当前位置的经度：' + res.longitude);
 				        console.log('当前位置的纬度：' + res.latitude);
+						self.userInfoUpdate()
 				    }
 				});
 				self.$Utils.finishFunc('getLocation');
+			},
+			
+			userInfoUpdate() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					user_no:uni.getStorageSync('riderInfo').user_no
+				};
+				postData.data = {
+					latitude:self.melatitude,
+					longitude:self.melongitude
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						console.log('更新位置成功')
+					} else {
+						console.log('更新位置失败')
+					}	
+				};
+				self.$apis.userInfoUpdate(postData, callback);
 			},
 			
 			
@@ -378,8 +407,12 @@
 						self.userData = res.info.data[0];
 						if(self.userData.is_work==1){
 							self.searchItem.city_id = self.userData.city_id;
+							self.interval = setInterval(function(){
+							  self.getMainData(true)
+							},300000)
 							self.getMainData(true)
 						}else{
+							clearInterval(self.interval)
 							self.$Utils.finishFunc('getUserInfoData');
 						}
 					} else {
@@ -392,6 +425,9 @@
 			
 			getMainData(isNew) {
 				const self = this;
+				
+				
+				var now = Date.parse(new Date())/1000;
 				if (isNew) {
 					self.mainData = [];
 					self.paginate = {
@@ -405,15 +441,37 @@
 				postData.tokenFuncName = 'getRiderToken';
 				postData.paginate = self.$Utils.cloneForm(self.paginate);
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
-				
+				//postData.searchItem.invalid_time = ['>',now];
 				const callback = (res) => {
+					uni.setStorageSync('number',res.info.total)
 					if (res.info.data.length > 0) {
+						
 						self.mainData.push.apply(self.mainData, res.info.data);
+						for (var i = 0; i < self.mainData.length; i++) {
+							console.log('self.mainData', self.mainData[i])
+							self.mainData[i].min = parseInt((parseInt(self.mainData[i].invalid_time) - parseInt(now))/60);
+							if(self.mainData[i].start_latitude!=''&&self.mainData[i].start_longitude!=''){
+								self.mainData[i].startDistance = self.$Utils.distance(parseFloat(self.mainData[i].start_latitude),parseFloat(self.mainData[i].start_longitude)
+								,parseFloat(self.melatitude),parseFloat(self.melongitude));
+							}
+							if(self.mainData[i].end_latitude!=''&&self.mainData[i].end_longitude!=''){
+								self.mainData[i].endDistance = self.$Utils.distance(parseFloat(self.mainData[i].end_latitude),parseFloat(self.mainData[i].start_longitude)
+								,parseFloat(self.melatitude),parseFloat(self.melongitude));
+							}
+						}
+						
+					};
+					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))){
+						self.checkTotal()
 					}
-					console.log('self.mainData', self.mainData)
 					self.$Utils.finishFunc('getUserInfoData');
 				};
 				self.$apis.orderGet(postData, callback);
+			},
+			
+			checkTotal(){
+				const self = this;
+				plus.push.createMessage("您有新的订单！");
 			},
 			
 			change(current) {
@@ -421,11 +479,15 @@
 				if(current!=self.current){
 					self.current = current;
 					if(self.current==1){
+						self.interval = setInterval(function(){
+						  self.getMainData(true)
+						},30000)
 						delete self.searchItem.rider_no;
 						self.searchItem.transport_status = 0;
 					}else if(self.current==2){
 						self.searchItem.transport_status = 1;
-						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no
+						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no;
+						clearInterval(self.interval)
 					};
 					if(self.userData.is_work==1){
 						self.getMainData(true)
@@ -504,7 +566,7 @@
 	@import "../../assets/style/index.css";
 	@import "../../assets/style/agreeSel.css";
 page{background: #F5F5F5;padding-bottom: 30px;}
-.T-head-Icon{padding: 15px 4%; box-sizing: border-box;}
+.T-head-Icon{padding:40px 4% 0 4%; box-sizing: border-box;height: 80px;}
 .T-head-Icon .icon{width: 20px; height: 20px; display: block;}
 .orderNav{ position: fixed;top: 50px;left: 0; width: 100%;box-sizing: border-box;background: #fff; z-index: 5;border-bottom: 1px solid #eee;}
 </style>

@@ -4,10 +4,9 @@
 		<div class="T-head line50 center fs16 Tfix-head">
 			&nbsp;
 		</div>
-		<div class="h50 pubBj"></div>
-		
 		<div>
-			<img style="width: 100%; height: auto; display: block;padding-bottom:40px;" src="../../static/images/registered-img.png" mode=""></img>
+			<img style="width: 100%; height: 190px; display: block;padding-bottom:40px;" 
+			src="../../static/images/registered-img.png" mode=""></img>
 		</div>
 		
 		<div class="pub_editInfor pdlr4">
