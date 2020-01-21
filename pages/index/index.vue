@@ -20,18 +20,19 @@
 				<!-- 外卖送餐 -->
 				<li v-if="item.type==5||item.type==6" v-for="(item,index) in mainData" :key="index">
 					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间{{item.min}}分钟</h1>
+						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
+						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
 						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" :data-id="item.id"
 					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
 						<div class="pdtb10 adrsTwo">
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">{{item.startDistance}}km</em><em class="dian green"></em>
+								<em class="fs12 color6 ftn range">{{item.distance_to_start}}km</em><em class="dian green"></em>
 								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">{{item.endDistance}}km</em><em class="dian red"></em>
+								<em class="fs12 color6 ftn range">{{item.total_distance}}km</em><em class="dian red"></em>
 								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
@@ -55,26 +56,31 @@
 							</p>
 						</div>
 					</a>
-					<div class="submitbtn mgt20 pdlr4">
-						<button class="Wbtn" @click="deltAlert">抢单</button>
+					
+					<div class="submitbtn mgt20 pdlr4" v-if="item.transport_status==1">
+						<button class="Wbtn" @click="deltAlert(index)">抢单</button>
+					</div>
+					<div class="submitbtn mgt20 pdlr4 flexEnd" v-if="item.transport_status==2">
+						<button class="sdBtn" @click="confirm(index)">确认送达</button>
 					</div>
 				</li>
 				
 				<!-- 代买 -->
-				<li v-for="(item,index) in mainData" :key="index" v-if="item.type!=5">
+				<li v-for="(item,index) in mainData" :key="index" v-if="item.type!=5&&item.type!=6">
 					<div class="datt flexRowBetween bordB1">
-						<h1 class="left fs14">剩余接单时间{{item.min}}分钟</h1>
+						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
+						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
 						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
 						<div class="pdtb10 adrsTwo">
 							<p class="flex line">
-								<em class="fs12 color6 ftn range">{{item.startDistance}}km</em><em class="dian green"></em>
+								<em class="fs12 color6 ftn range">{{item.distance_to_start}}km</em><em class="dian green"></em>
 								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
 							<p class="flex line" v-if="item.type!=2">
-								<em class="fs12 color6 ftn range">{{item.endDistance}}km</em><em class="dian red"></em>
+								<em class="fs12 color6 ftn range">{{item.type!=3?item.total_distance:'0'}}km</em><em class="dian red"></em>
 								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
@@ -90,10 +96,10 @@
 					</a>
 					<div class="pdlr4">
 						<div class="beizhu mgb15" v-if="item.passage1!=''">{{item.passage1}}</div>
-						<div class="submitbtn mgt20" v-if="item.transport_status==0">
+						<div class="submitbtn mgt20" v-if="item.transport_status==1">
 							<button class="Wbtn" @click="deltAlert(index)">抢单</button>
 						</div>
-						<div class="submitbtn mgt20 pdlr4 flexEnd" v-if="item.transport_status==1">
+						<div class="submitbtn mgt20 pdlr4 flexEnd" v-if="item.transport_status==2">
 							<button class="sdBtn" @click="confirm(index)">确认送达</button>
 						</div>
 					</div>
@@ -107,7 +113,7 @@
 		<!-- 费用明细弹框 -->
 		<div class="black-bj" v-show="is_show"></div>
 		<div class="fxmxShow" v-show="is_moneyMxShow">
-			<div class="colseBtn" @click="moneyMxClose">×</div>
+			<div class="colseBtna" @click="moneyMxClose" style="left:0">×</div>
 			<div class="center line40">费用明细</div>
 			<div class="infor fs12 color6">
 				<p class="flexRowBetween" v-for="(item,index) in moneyMxDate">
@@ -239,11 +245,14 @@
 				searchItem:{
 					thirdapp_id:['in',[2,3]],
 					user_type:0,
-					transport_status:0,
-					level:0
+					transport_status:1,
+					level:0,
+					pay_status:1
 				},
 				userData:{},
-				willId:''
+				willId:'',
+				willIndex:-1
+				
 			}
 		},
 		
@@ -256,6 +265,27 @@
 			const self = this;
 			self.$Utils.loadAll(['getUserInfoData','getLocation'], self);
 		},
+		
+		beforeDestroy() {
+			const self = this;
+			console.log(232)
+			clearInterval(self.interval)
+		},
+		
+		onUnload() {
+			const self = this;
+			console.log(232)
+			clearInterval(self.interval)
+		},
+		
+		onHide() {
+			const self = this;
+			console.log(232)
+			clearInterval(self.interval)
+		},
+		
+		
+		
 		
 		methods: {
 			
@@ -317,11 +347,13 @@
 				postData.tokenFuncName = 'getRiderToken';
 				postData.searchItem = {
 					id:self.mainData[index].id,
-					user_type:0
+					user_type:0,
+					thirdapp_id:self.mainData[index].thirdapp_id
 				};
 				postData.data = {
 					transport_status:3,
-					finish_time:now
+					finish_time:now,
+					thirdapp_id:self.mainData[index].thirdapp_id
 				};
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {
@@ -345,11 +377,13 @@
 				postData.tokenFuncName = 'getRiderToken';
 				postData.searchItem = {
 					id:self.willId,
-					user_type:0
+					user_type:0,
+					thirdapp_id:['in',[2,3]]
 				};
 				postData.data = {
-					transport_status:1,
-					rider_no:self.userData.user_no
+					transport_status:2,
+					rider_no:self.userData.user_no,
+					thirdapp_id:self.mainData[self.willIndex].thirdapp_id
 				};
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {
@@ -441,29 +475,37 @@
 				postData.tokenFuncName = 'getRiderToken';
 				postData.paginate = self.$Utils.cloneForm(self.paginate);
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
-				//postData.searchItem.invalid_time = ['>',now];
+				postData.latitude = parseFloat(self.melatitude);
+				postData.longitude = parseFloat(self.melongitude);
+				if(self.current==1){
+					postData.searchItem.invalid_time = ['>',now];
+				};
 				const callback = (res) => {
-					uni.setStorageSync('number',res.info.total)
+					
 					if (res.info.data.length > 0) {
 						
+						
+						for (var i = 0; i < res.info.data.length; i++) {
+							console.log('res.info.data', res.info.data[i])
+							/* res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
+							if(res.info.data[i].start_latitude!=''&&res.info.data[i].start_longitude!=''){
+								res.info.data[i].startDistance = self.$Utils.distance(parseFloat(res.info.data[i].start_latitude),parseFloat(res.info.data[i].start_longitude)
+								,parseFloat(self.melatitude),parseFloat(self.melongitude));
+							}
+							console.log('res.info.data[i].startDistance',res.info.data[i].startDistance)
+							if(res.info.data[i].end_latitude!=''&&res.info.data[i].end_longitude!=''){
+								res.info.data[i].endDistance = self.$Utils.distance(parseFloat(res.info.data[i].end_latitude),parseFloat(res.info.data[i].start_longitude)
+								,parseFloat(self.melatitude),parseFloat(self.melongitude));
+							} */
+							res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2)
+						};
 						self.mainData.push.apply(self.mainData, res.info.data);
-						for (var i = 0; i < self.mainData.length; i++) {
-							console.log('self.mainData', self.mainData[i])
-							self.mainData[i].min = parseInt((parseInt(self.mainData[i].invalid_time) - parseInt(now))/60);
-							if(self.mainData[i].start_latitude!=''&&self.mainData[i].start_longitude!=''){
-								self.mainData[i].startDistance = self.$Utils.distance(parseFloat(self.mainData[i].start_latitude),parseFloat(self.mainData[i].start_longitude)
-								,parseFloat(self.melatitude),parseFloat(self.melongitude));
-							}
-							if(self.mainData[i].end_latitude!=''&&self.mainData[i].end_longitude!=''){
-								self.mainData[i].endDistance = self.$Utils.distance(parseFloat(self.mainData[i].end_latitude),parseFloat(self.mainData[i].start_longitude)
-								,parseFloat(self.melatitude),parseFloat(self.melongitude));
-							}
-						}
 						
 					};
 					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))){
 						self.checkTotal()
 					}
+					uni.setStorageSync('number',res.info.total)
 					self.$Utils.finishFunc('getUserInfoData');
 				};
 				self.$apis.orderGet(postData, callback);
@@ -471,6 +513,7 @@
 			
 			checkTotal(){
 				const self = this;
+				self.$Utils.finishFunc('getUserInfoData');
 				plus.push.createMessage("您有新的订单！");
 			},
 			
@@ -483,11 +526,12 @@
 						  self.getMainData(true)
 						},30000)
 						delete self.searchItem.rider_no;
-						self.searchItem.transport_status = 0;
-					}else if(self.current==2){
 						self.searchItem.transport_status = 1;
+					}else if(self.current==2){
+						self.searchItem.transport_status = 2;
 						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no;
 						clearInterval(self.interval)
+						console.log(self.interval)
 					};
 					if(self.userData.is_work==1){
 						self.getMainData(true)
@@ -534,6 +578,8 @@
 				self.is_moneyMxShow = !self.is_moneyMxShow
 			},
 			
+			
+			
 			deltAlertClose(){
 				const self = this;
 				self.is_deltAlertShow = false;
@@ -542,6 +588,7 @@
 			deltAlert(index){
 				const self = this;
 				self.willId = self.mainData[index].id;
+				self.willIndex = index;
 				self.is_deltAlertShow=!self.is_deltAlertShow;
 			},
 			
@@ -566,6 +613,7 @@
 	@import "../../assets/style/index.css";
 	@import "../../assets/style/agreeSel.css";
 page{background: #F5F5F5;padding-bottom: 30px;}
+.colseBtna{ position: absolute; top: 10px;right: 10px;transform: translateX(-50%); width: 20px; height: 20px; border-radius: 50%; font-size: 20px; color: #999; border:1px solid #999; line-height: 16px; text-align: center; }
 .T-head-Icon{padding:40px 4% 0 4%; box-sizing: border-box;height: 80px;}
 .T-head-Icon .icon{width: 20px; height: 20px; display: block;}
 .orderNav{ position: fixed;top: 50px;left: 0; width: 100%;box-sizing: border-box;background: #fff; z-index: 5;border-bottom: 1px solid #eee;}

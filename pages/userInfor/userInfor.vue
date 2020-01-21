@@ -3,8 +3,8 @@
 		<div class="userInfor pdlr4">
 			<div class="item flexRowBetween">
 				<div class="ll">头像：</div>
-				<div class="rr flexEnd" @click="upLoadImg" v-if="mainData.mainImg&&mainData.mainImg[0]">
-					<div class="userPhoto mgr15 oh"><img :src="mainData.mainImg[0].url" ></div>
+				<div class="rr flexEnd" @click="upLoadImg" v-if="submitData.mainImg&&submitData.mainImg[0]">
+					<div class="userPhoto mgr15 oh"><img :src="submitData.mainImg[0].url" ></div>
 				</div>
 				<div class="rr flexEnd" @click="upLoadImg" v-else>
 					<div class="userPhoto mgr15 oh"><img src="../../static/images/about-img.png" ></div>
@@ -28,13 +28,13 @@
 					<input type="number" maxlength="11" name="" value="" placeholder="请输入您的电话" v-model="submitData.phone"/>
 				</div>
 			</div>
-			<div class="item flexRowBetween">
+			<!-- <div class="item flexRowBetween">
 				<div class="ll">验证码：</div>
 				<div class="rr flexRowBetween">
 					<div style="width: 40%;"><input type="text" name="" value="" placeholder="请输入验证码" style="text-align: left;" /></div>
 					<div class="yzmBtn">获取验证码</div>
 				</div>
-			</div>
+			</div> -->
 			
 		</div>
 		

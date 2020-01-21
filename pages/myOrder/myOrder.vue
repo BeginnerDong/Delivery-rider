@@ -56,6 +56,7 @@
 				current:1,
 				mainData:[],
 				searchItem:{
+					thirdapp_id:['in',[2,3]],
 					transport_status:3,
 					user_type:0
 				},

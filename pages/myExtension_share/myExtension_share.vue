@@ -2,7 +2,7 @@
 	<div>
 		
 		<div class="sharebox">
-			<a class="back-next pa" href="javascript:history.go(-1);"><img class="icon" src="../../static/images/backIcon.png" ></a>
+			<a class="back-next pa" @click="Router.back(1)"><img class="icon" src="../../static/images/backIcon.png" ></a>
 			<img class="bigPic" src="../../static/images/img.png" >
 			<img class="ewm" :src="userInfoData.qrCode" >
 		</div>

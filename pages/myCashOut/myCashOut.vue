@@ -57,12 +57,21 @@
 				}
 			}
 		},
+		
 		onLoad(options) {
 			const self = this;
 			self.type = options.type;
-			console.log('self.type',self.type)
-			self.$Utils.loadAll(['getMainData','getUserInfoData'], self);
+			self.behavior = options.behavior;
+			
+			console.log('self.behavior',self.behavior)
+			self.$Utils.loadAll(['getUserInfoData'], self);
 		},
+		
+		onShow() {
+			const self = this;
+			self.$Utils.loadAll(['getMainData'], self);
+		},
+		
 		methods: {
 			
 			allCount(){
@@ -105,11 +114,14 @@
 				postData.data = {
 					count:-self.submitData.count,
 					thirdapp_id:2,
-					status:0,
+					status:1,
 					trade_info:'提现',
-					type:2
+					type:2,
+					account:1,
+					behavior:self.behavior,
+					withdraw:1,
+					withdraw_status:0,
 				};
-				
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {					
 						self.$Utils.showToast('提交成功', 'none');

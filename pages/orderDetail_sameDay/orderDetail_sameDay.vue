@@ -7,33 +7,33 @@
 			</div>
 			<div class="orederDetal">
 				<ul>
-					<li class="fs13 msgLis color6">{{mainData.title}}、{{mainData.value}}、{{mainData.weight}}</li>
+					<li class="fs13 msgLis color6">{{mainData.title}}、{{mainData.value}}、{{mainData.weight}}kg</li>
 				</ul>
 			</div>
 		</div>
-		<div class="f5H5" v-if="mainData.transport_status==1"></div>
-		<div class="pdlr4" v-if="mainData.transport_status==1">
+		<div class="f5H5" v-if="mainData.transport_status==2"></div>
+		<div class="pdlr4" v-if="mainData.transport_status==2">
 			<div class="pdtb10 bordB1">
 				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon4.png">位置信息</div>
 			</div>
 			<div class="fs13 GprsMsg pdtb10 bordB1">
 				<div class="item flexRowBetween mgb10">
 					<p class="adrs flex"><em class="dian"></em>{{mainData.start_site}}</p>
-					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
+					<span class="flexEnd" @click="openMap(mainData.start_latitude,mainData.start_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
-					<p class="adrs flex">{{mainData.start_site}}&nbsp;15923014120</p>
-					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
+					<p class="adrs flex">{{mainData.start_name}}&nbsp;{{mainData.start_phone}}</p>
+					<span class="flexEnd" @click="callPhone(mainData.end_phone)"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
 				</div>
 			</div>
 			
 			<div class="fs13 GprsMsg pdtb10">
 				<div class="item flexRowBetween mgb10">
 					<p class="adrs flex"><em class="dian"></em>{{mainData.end_site}}</p>
-					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
+					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
-					<p class="adrs flex">何洁&nbsp;15923014666</p>
+					<p class="adrs flex" @click="callPhone(mainData.end_phone)">{{mainData.end_name}}&nbsp;{{mainData.end_phone}}</p>
 					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
 				</div>
 			</div>
@@ -85,11 +85,11 @@
 			</div>
 		</div>
 		
-		<div class="detal_b_bar submitbtn" v-if="mainData.transport_status==0">
+		<div class="detal_b_bar submitbtn" @click="orderUpdate()" v-if="mainData.transport_status==1">
 			<button class="btn">立即接单</button>
 		</div>
 		
-		<div class="detal_b_bar submitbtn" v-if="mainData.transport_status==1">
+		<div class="detal_b_bar submitbtn" @click="confirm()" v-if="mainData.transport_status==2">
 			<button class="btn">确认送达</button>
 		</div>
 		
@@ -114,9 +114,111 @@
 		onLoad(options) {
 			const self = this;
 			self.id = options.id;
-			self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData','getUserInfoData'], self);
 		},
 		methods: {
+			
+			
+			getUserInfoData() {
+				const self = this;
+				console.log('852369')
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id:2,
+				};
+				postData.tokenFuncName = 'getRiderToken';
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userInfoData = res.info.data[0];
+						
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+					self.$Utils.finishFunc('getUserInfoData');
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
+			
+			confirm() {
+				const self = this;
+				var now = Date.parse(new Date())/1000;
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					id:self.mainData.id,
+					user_type:0,
+					thirdapp_id:self.mainData.thirdapp_id
+				};
+				postData.data = {
+					transport_status:3,
+					finish_time:now,
+					thirdapp_id:self.mainData.thirdapp_id
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 1000);
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
+			orderUpdate() {
+				const self = this;
+				
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken';
+				postData.searchItem = {
+					id:self.mainData.id,
+					user_type:0,
+					thirdapp_id:['in',[2,3]]
+				};
+				postData.data = {
+					transport_status:2,
+					rider_no:self.userInfoData.user_no,
+					thirdapp_id:self.mainData.thirdapp_id
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('接单成功', 'none')
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 1000);
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
+			callPhone(phone){
+				const self = this;
+				uni.makePhoneCall({
+				    phoneNumber: phone
+				});
+			},
+			
+			openMap(latitude,longitude){
+				const self = this;
+				 uni.openLocation({
+					latitude: parseFloat(latitude),
+					longitude: parseFloat(longitude),
+					success: function () {
+						console.log('success');
+					}
+				});
+			},
 			
 			deltAlert(){
 				const self = this;
@@ -142,6 +244,9 @@
 						};
 						if(parseFloat(self.mainData.gratuity)>0){
 							self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData.gratuity})
+						};
+						if(parseFloat(self.mainData.member_reduce)>0){
+							self.moneyMxDate.push({title:'会员抵扣',price:'-￥'+self.mainData.member_reduce})
 						};
 						self.$Utils.finishFunc('getMainData');
 					}      

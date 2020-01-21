@@ -1,21 +1,21 @@
 <template>
 	<div>
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">{{userInfoData.balance}}<em class="fs12">元</em></div>
+			<div class="bigNum pd10">{{allCount}}<em class="fs12">元</em></div>
 			<div class="yuan pdb20 fs13">奖励余额</div>
-			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut'}})">提现</a>
+			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior==2'}})">提现</a>
 		</div>
 		<div class="orderBetween" >
 			<div class="item flexRowBetween" v-for="(item,index) in mainData" :key="index">
 				<div class="left color6 flex">
 					<div><img class="photo" src="../../static/images/promote-icon.png" ></div>
 					<div class="photoName">
-						<p class="fs13">快乐的猫</p>
-						<p class="fs12">2019-10-26</p>
+						<p class="fs13"></p>
+						<p class="fs12">{{item.create_time}}</p>
 					</div>
 				</div>
 				<div class="right flexEnd">
-					<p class="red">+￥{{item.count}}</p>
+					<p class="red">{{item.count}}</p>
 				</div>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 				searchItem:{
 					type:2,
 					status:['in',[0,1]],
-					bahavior:2
+					behavior:2
 				},
 				userInfoData:{},
 				mainData:[],
@@ -52,6 +52,7 @@
 					pagesize: 10,
 					is_page: true,
 				},
+				allCount:0
 			}
 		},
 		
@@ -102,11 +103,19 @@
 				const postData = {};
 				postData.paginate = self.$Utils.cloneForm(self.paginate);
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
-				postData.tokenFuncName = 'getRiderToken'
+				postData.tokenFuncName = 'getRiderToken';
+				postData.compute = {
+				  all:[
+					'sum',
+					'count',
+					self.$Utils.cloneForm(self.searchItem)
+				  ],
+				};
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);
 					}
+					self.allCount = res.info.compute.all
 					console.log(self.mainData)
 				};
 				self.$apis.flowLogGet(postData, callback);

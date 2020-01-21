@@ -2,9 +2,9 @@
 	<div>
 		
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">{{userInfoData.balance}}</div>
+			<div class="bigNum pd10">{{allCount}}</div>
 			<div class="yuan pdb20 fs13">收益(元)</div>
-			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut'}})">提现</a>
+			<a class="txBtn" @click="goCash()">提现</a>
 		</div>
 		
 		<div class="orderNav bordB1">
@@ -20,7 +20,7 @@
 						<p class="fs12">订单编号：{{item.order_no}}</p>
 					</div>
 					<div class="right flexEnd">
-						<p class="red">+￥{{item.count}}</p>
+						<p class="red">{{item.count}}</p>
 					</div>
 				</a>
 			</div>
@@ -40,7 +40,9 @@
 				searchItem:{
 					type:2,
 					status:['in',[0,1]],
-					behavior:0
+					behavior:1,
+					withdraw:0,
+					count:['>',0]
 				},
 				userInfoData:{},
 				mainData:[],
@@ -50,7 +52,8 @@
 					pagesize: 10,
 					is_page: true,
 				},
-				current:1
+				current:1,
+				allCount:0
 			}
 		},
 		
@@ -78,17 +81,24 @@
 		
 		methods: {
 			
-		
+			goCash(){
+				const self = this;
+				if(self.current==1){
+					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=1'}})
+				}else if(self.current==2){
+					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=0'}})
+				}
+			},
 			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
 					self.current = current;
 					if(self.current==1){
-						self.searchItem.behavior=0;
+						self.searchItem.behavior=1;
 						
 					}else if(self.current==2){
-						self.searchItem.behavior=1;
+						self.searchItem.behavior=0;
 					}
 					self.getMainData(true)
 				}
@@ -127,11 +137,19 @@
 				const postData = {};
 				postData.paginate = self.$Utils.cloneForm(self.paginate);
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
-				postData.tokenFuncName = 'getRiderToken'
+				postData.tokenFuncName = 'getRiderToken';
+				postData.compute = {
+				  all:[
+					'sum',
+					'count',
+					self.$Utils.cloneForm(self.searchItem)
+				  ],
+				};
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);
 					}
+					self.allCount = res.info.compute.all
 					console.log(self.mainData)
 				};
 				self.$apis.flowLogGet(postData, callback);

@@ -18,6 +18,30 @@ export default {
 		http.HTTP(allParams);
 	},
 	
+	cardAdd(param, callback) {
+		var allParams = {
+			url: 'Common/UserCard/add',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	cardUpdate(param, callback) {
+		var allParams = {
+			url: 'Common/UserCard/update',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	cardGet(param, callback) {
 		var allParams = {
 			url: 'Common/UserCard/get',

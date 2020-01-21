@@ -70,7 +70,7 @@
 					bank:'',
 					isdefault:''
 				},		
-				index:'',
+				index:-1,
 				labelData:[],
 				Utils:this.$Utils
 			}
@@ -149,11 +149,14 @@
 					self.submitData.number = res.info.data[0].number;
 					self.submitData.phone = res.info.data[0].phone;
 					self.submitData.isdefault = res.info.data[0].isdefault;
+					self.submitData.bank = res.info.data[0].bank;
 					for (var i = 0; i < self.labelData.length; i++) {
 						if(self.labelData[i].id==res.info.data[0].bank){
+							console.log(32423)
 							self.index = i
 						}
 					}
+					console.log(self.index)
 				};
 				self.$apis.cardGet(postData, callback);
 			},
@@ -173,7 +176,11 @@
 					uni.setStorageSync('canClick', true);
 					if (data && data.solely_code == 100000) {
 						self.$Utils.showToast('修改成功','success');
-						self.$Router.redirectTo({route:{path:'/pages/myBankCard/myBankCard'}})
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 1000);
 					} else {
 						self.$Utils.showToast(data.msg,'error')
 					};
@@ -196,7 +203,12 @@
 					uni.setStorageSync('canClick', true);
 					if (data && data.solely_code == 100000) {
 						self.$Utils.showToast('添加成功','success');
-						self.$Router.redirectTo({route:{path:'/pages/myBankCard/myBankCard'}})
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 1000);
+						//self.$Router.redirectTo({route:{path:'/pages/myBankCard/myBankCard'}})
 					} else {
 						self.$Utils.showToast(data.msg,'success')
 					}

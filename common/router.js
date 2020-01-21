@@ -35,7 +35,7 @@ class Router {
 
 	back(delta) {
 		uni.navigateBack({
-			delta
+			delta:delta
 		})
 	}
 }

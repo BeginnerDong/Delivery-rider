@@ -19,7 +19,7 @@
 			<div class="item flexCenter">
 				<div class="name"><img class="icon" src="../../static/images/registered-icon1.png" ></div>
 				<div class="rr bordB1">
-					<input type="text" value="" placeholder="请输入登录密码" v-model="submitData.password"/>
+					<input type="password" value="" placeholder="请输入登录密码" v-model="submitData.password"/>
 				</div>
 			</div>
 		</div>
@@ -47,6 +47,8 @@
 		
 		onLoad(options) {
 			const self = this;
+			uni.hideLoading();
+			
 			if (uni.getStorageSync('riderToken')) {
 				uni.redirectTo({
 					url: '/pages/index/index'

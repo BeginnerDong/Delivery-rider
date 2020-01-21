@@ -17,7 +17,8 @@
 					</div>
 					
 					<div class="R fs12">
-						<a class="child" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user_myBankCard_add/user_myBankCard_add?id='+$event.currentTarget.dataset.id}})">
+						<a class="child" :data-id="item.id" 
+						@click="Router.navigateTo({route:{path:'/pages/myBankCard_add/myBankCard_add?id='+$event.currentTarget.dataset.id}})">
 							<img  src="../../static/images/card-icon3.png" mode=""></image>编辑
 						</a>
 						<div class="child" :data-id="item.id" @click="deleteCard($event.currentTarget.dataset.id)">
@@ -49,7 +50,7 @@
 
 		onLoad(options) {
 			const self = this;	
-			self.$Utils.loadAll(['getMainData'], self)
+			
 			
 		},
 
@@ -61,6 +62,12 @@
 				self.getMainData()
 			};
 		},
+		
+		onShow() {
+			const self = this;
+			self.mainData = [];
+			self.$Utils.loadAll(['getMainData'], self)
+		},
 
 		methods: {
 
@@ -69,6 +76,9 @@
 				self.choosedIndex = index;
 				uni.setStorageSync('choosedAddressData', self.mainData[index]);
 				console.log('choosedIndex', self.choosedIndex);
+				uni.navigateBack({
+					delta:1
+				})
 			},
 
 			getMainData() {
