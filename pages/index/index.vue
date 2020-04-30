@@ -220,6 +220,10 @@
 						</div>
 					</a>
 				</div>
+				
+				<div class="submitbtn" style="margin-top: 80px;">
+					<button class="btn flexCenter w" @click="loginOff">退出登录</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -289,11 +293,32 @@
 		
 		methods: {
 			
+			loginOff(){
+				const self = this;
+				uni.showModal({
+					title:'提示',
+					content:'确认要退出登录吗',
+					showCancel:true,
+					success(res) {
+						if(res.confirm){
+							uni.removeStorageSync('riderToken');
+							uni.removeStorageSync('riderInfo');
+							uni.redirectTo({
+							  url: '/pages/login/login'
+							});
+						}else{
+							
+						}
+					}
+				})
+			},
+			
 			getLocation(){
 				const self = this;
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
+						console.log('222',res)
 						self.melongitude = res.longitude;
 						self.melatitude = res.latitude;
 				        console.log('当前位置的经度：' + res.longitude);
@@ -481,28 +506,18 @@
 					postData.searchItem.invalid_time = ['>',now];
 				};
 				const callback = (res) => {
-					
-					if (res.info.data.length > 0) {
-						
-						
-						for (var i = 0; i < res.info.data.length; i++) {
-							console.log('res.info.data', res.info.data[i])
-							/* res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
-							if(res.info.data[i].start_latitude!=''&&res.info.data[i].start_longitude!=''){
-								res.info.data[i].startDistance = self.$Utils.distance(parseFloat(res.info.data[i].start_latitude),parseFloat(res.info.data[i].start_longitude)
-								,parseFloat(self.melatitude),parseFloat(self.melongitude));
-							}
-							console.log('res.info.data[i].startDistance',res.info.data[i].startDistance)
-							if(res.info.data[i].end_latitude!=''&&res.info.data[i].end_longitude!=''){
-								res.info.data[i].endDistance = self.$Utils.distance(parseFloat(res.info.data[i].end_latitude),parseFloat(res.info.data[i].start_longitude)
-								,parseFloat(self.melatitude),parseFloat(self.melongitude));
-							} */
-							res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2)
+					if(res.solely_code==100000){
+						if (res.info.data.length > 0) {
+							for (var i = 0; i < res.info.data.length; i++) {
+								res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2)
+							};
+							self.mainData.push.apply(self.mainData, res.info.data);
 						};
-						self.mainData.push.apply(self.mainData, res.info.data);
-						
+					}else{
+						self.$Utils.showToast(res.msg, 'none')
 					};
-					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))){
+					
+					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))&&self.current==1){
 						self.checkTotal()
 					}
 					uni.setStorageSync('number',res.info.total)

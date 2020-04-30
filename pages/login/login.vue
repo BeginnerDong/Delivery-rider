@@ -1,9 +1,6 @@
 <template>
 	<div v-if="showAll">
-		<!-- 标题 -->
-		<div class="T-head line50 center fs16 Tfix-head">
-			&nbsp;
-		</div>
+		
 		<div>
 			<img style="width: 100%; height: 190px; display: block;padding-bottom:40px;" 
 			src="../../static/images/registered-img.png" mode=""></img>
@@ -81,7 +78,7 @@
 							self.$Utils.showToast(res.msg,'none')
 						}
 					}
-					self.$apis.login(postData, callback);
+					self.$apis.loginByRider(postData, callback);
 				} else {
 					self.$Utils.showToast('请补全登录信息', 'none')
 				};

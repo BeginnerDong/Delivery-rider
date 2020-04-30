@@ -376,6 +376,20 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	loginByRider(param, callback) {
+		var allParams = {
+			url: 'func/Common/loginByRider',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	
 
 	shopLogin(param, callback) {
 

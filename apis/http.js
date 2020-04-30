@@ -26,10 +26,13 @@ export default {
         };
 	
 		var custom_header = {'content-type': 'application/json',};
-		uni.showLoading({
-			title: '加载中',
-			mask: true
-		});
+		var array = obj.url.split('/');
+		if(array[2]&&array[2]=='get'){
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			});
+		};
 		uni.request({
 			url: config.baseUrl + obj.url, //仅为示例，并非真实接口地址。
 			data: obj.data,		

@@ -56,7 +56,8 @@
                         "appkey_ios" : "fZMKVoEKzUCDvmUH5vI5Kmjde7FqaxHc",
                         "appkey_android" : "fZMKVoEKzUCDvmUH5vI5Kmjde7FqaxHc"
                     }
-                }
+                },
+                "ad" : {}
             },
             "icons" : {
                 "android" : {
@@ -90,7 +91,8 @@
                     }
                 }
             }
-        }
+        },
+        "nvueLaunchMode" : "fast"
     },
     /* SDK配置 */
     "quickapp" : {},
