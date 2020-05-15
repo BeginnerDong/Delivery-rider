@@ -62,11 +62,11 @@
 			<div class="orederDetal">
 				<ul>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">派单时间</p>
+						<p class="flex">购买时间</p>
 						<p class="color3">{{mainData.create_time}}</p>
 					</li>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">开始时间</p>
+						<p class="flex">派送时间</p>
 						<p class="color3">{{mainData.start_time}}</p>
 					</li>
 				</ul>

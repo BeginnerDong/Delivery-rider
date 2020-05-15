@@ -29,7 +29,7 @@
 			
 			<div class="fs13 GprsMsg pdtb10">
 				<div class="item flexRowBetween mgb10">
-					<p class="adrs flex"><em class="dian"></em>{{mainData.end_site}}</p>
+					<p class="adrs flex"><em class="dian red"></em>{{mainData.end_site}}</p>
 					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">

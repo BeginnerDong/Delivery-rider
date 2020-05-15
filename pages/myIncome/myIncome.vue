@@ -2,8 +2,8 @@
 	<div>
 		
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">{{allCount}}</div>
-			<div class="yuan pdb20 fs13">收益(元)</div>
+			<div class="bigNum pd10">{{userInfoData.balance}}</div>
+			<div class="yuan pdb20 fs13">可提现金额(元)</div>
 			<a class="txBtn" @click="goCash()">提现</a>
 		</div>
 		

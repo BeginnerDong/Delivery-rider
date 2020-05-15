@@ -60,12 +60,15 @@
 					<p class="adrs flex"><em class="dian"></em>{{mainData.start_site}}</p>
 					<span class="flexEnd" @click="openMap(mainData.start_latitude,mainData.start_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
-				
+				<div class="item flexRowBetween">
+					<p class="adrs flex" @click="callPhone(mainData.start_phone)">商家&nbsp;{{mainData.start_phone}}</p>
+					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
+				</div>
 			</div>
 			
 			<div class="fs13 GprsMsg pdtb10">
 				<div class="item flexRowBetween mgb10">
-					<p class="adrs flex"><em class="dian"></em>{{mainData.end_site}}</p>
+					<p class="adrs flex"><em class="dian red"></em>{{mainData.end_site}}</p>
 					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
@@ -299,9 +302,9 @@
 						if(parseFloat(self.mainData.rush_price)>0){
 							self.moneyMxDate.push({title:'高峰时段附加费',price:'￥'+self.mainData.rush_price})
 						};
-						if(parseFloat(self.mainData.delivery_reduce)>0){
+						/* if(parseFloat(self.mainData.delivery_reduce)>0){
 							self.moneyMxDate.push({title:'配送费减免',price:'-￥'+self.mainData.delivery_reduce})
-						};
+						}; */
 						if(parseFloat(self.mainData.gratuity)>0){
 							self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData.gratuity})
 						};

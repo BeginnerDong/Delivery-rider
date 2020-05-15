@@ -1,24 +1,25 @@
 <template>
 	<div>
 		<div class="myExtendTop white center">
-			<div class="yuan fs13 pdb5">今天共{{dayCount}}单</div>
-			<div class="bigNum">{{userInfoData.balance}}<em class="fs12">元</em></div>
+			<div class="yuan fs13 pdb5">共{{dayCount}}单</div>
+			<div class="bigNum">{{moneyCount}}<em class="fs12">元</em></div>
 		</div>
 		<div class="jifenTwoNum flexRowBetween boxShaow radius5">
 			<div class="item">
 				<p class="pdb5 flexCenter">开始时间<img class="arrow" src="../../static/images/the_order-icon1.png"></p>
 				<div class="num fs12">
-					<picker mode="date" :value='start' @change="changeStartTime">
+					<!-- <picker mode="date" :value='start' @change="changeStartTime">
 						{{start==''?'请选择':start}} 
-					</picker>
+					</picker> -->
+					<dyDatePicker placeholder="请选择" :childValue="start" :minSelect="from_minSelect" :maxSelect="from_maxSelect"
+					:iconshow="false" @getData="changeStartTime"></dyDatePicker>
 				</div>
 			</div>
 			<div class="item">
 				<p class="pdb5  flexCenter">结束时间<img class="arrow" src="../../static/images/the_order-icon1.png"></p>
 				<div class="num fs12">
-					<picker mode="date" :value='end' @change="changeEndTime">
-						 {{end==''?'请选择':end}} 
-					</picker>
+					<dyDatePicker placeholder="请选择" :childValue="end" :minSelect="to_minSelect" :maxSelect="to_maxSelect"
+					:iconshow="false" @getData="changeEndTime"></dyDatePicker>
 				</div>
 			</div>
 		</div>
@@ -29,7 +30,7 @@
 		</div>
 		
 		<div class="orderBetween">
-			<div class="item flexRowBetween fs12 color6" v-for="(item,index) in mainData" :key="index">
+			<div class="item flexRowBetween fs12 color6" @click="toDetail(item.type,item.id)" v-for="(item,index) in mainData" :key="index">
 				<div class="left">
 					<p class="color6 pdb5">订单编号：{{item.order_no}}</p>
 					<p class="color9 tex2"><i class="icon"></i>{{item.end_site}}<!-- <em class="mgl5 fs12">4.5公里</em> --></p>
@@ -46,7 +47,11 @@
 
 
 <script>
+	import dyDatePicker from '@/components/dy-Date/dy-Date.vue'
 	export default {
+		components: {
+			dyDatePicker
+		},
 		data() {
 			return {
 				Router:this.$Router,
@@ -63,7 +68,12 @@
 				userInfoData:{},
 				dayCount:0,
 				end:'',
-				start:''
+				start:'',
+				from_minSelect: '1900/01/01',
+				from_maxSelect: '2050/12/31',
+				to_minSelect: '1900/01/01',
+				to_maxSelect: '2050/12/31',
+				moneyCount:0
 			}
 		},
 		
@@ -78,7 +88,7 @@
 			const self =  this;
 			self.getUserInfoData();
 			self.getMainData(true);
-			self.getDayData()
+			//self.getDayData()
 		},
 		
 		onReachBottom() {
@@ -92,9 +102,24 @@
 		
 		methods: {
 			
+			toDetail(type,id){
+				const self = this;
+				if(type==1){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_fetchDeliver/orderDetail_fetchDeliver?id='+id}})
+				}else if(type==2){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_Agency/orderDetail_Agency?id='+id}})
+				}else if(type==3){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_daimai/orderDetail_daimai?id='+id}})
+				}else if(type==4){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_sameDay/orderDetail_sameDay?id='+id}})
+				}else if(type==5||type==6){
+					self.Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+id}})
+				}
+			},
+			
 			changeStartTime(e){
 				const self = this;
-				self.start = e.detail.value;
+				self.start = e;
 				
 				self.startTimestamp = self.$Utils.timeToTimestamp(self.start);
 				if(self.startTimestamp&&self.endTimestamp){
@@ -105,7 +130,7 @@
 			
 			changeEndTime(e){
 				const self = this;
-				self.end = e.detail.value;
+				self.end = e;
 				
 				self.endTimestamp = self.$Utils.timeToTimestamp(self.end);
 				if(self.startTimestamp&&self.endTimestamp){
@@ -159,7 +184,11 @@
 				postData.searchItem.finish_time=['between',[dayStart,nowTime]];
 				const callback = (res) => {
 					if (res) {
-						self.dayCount = res.info.total
+						self.dayCount = res.info.total;
+						for (var i = 0; i < res.info.data.length; i++) {
+							self.moneyCount += parseFloat(res.info.data[i].rider_income)
+						}
+						
 					}
 					self.$Utils.finishFunc('getDayData');
 				};
@@ -182,14 +211,26 @@
 				postData.paginate = self.$Utils.cloneForm(self.paginate);
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
 				
+				postData.compute = {
+				  moneyCount:[
+					'sum',
+					'rider_income',
+					{}
+				  ],  
+				};
+				
+				
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);
 						for (var i = 0; i < self.mainData.length; i++) {
 							self.mainData[i].finish_time = self.$Utils.timeto(self.mainData[i].finish_time*1000,'hms')
 						}
-					}
+						self.dayCount = res.info.total;
+						self.moneyCount = res.info.compute.moneyCount
+					};
 					console.log('self.mainData', self.mainData)
+					console.log('self.moneyCount', self.moneyCount)
 					self.$Utils.finishFunc('getMainData');
 				};
 				self.$apis.orderGet(postData, callback);

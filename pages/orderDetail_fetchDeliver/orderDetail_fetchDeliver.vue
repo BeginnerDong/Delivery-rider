@@ -24,13 +24,13 @@
 				</div>
 				<div class="item flexRowBetween">
 					<p class="adrs flex">{{mainData.start_name}}&nbsp;{{mainData.start_phone}}</p>
-					<span class="flexEnd" @click="callPhone(mainData.end_phone)"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
+					<span class="flexEnd" @click="callPhone(mainData.start_phone)"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
 				</div>
 			</div>
 			
 			<div class="fs13 GprsMsg pdtb10">
 				<div class="item flexRowBetween mgb10">
-					<p class="adrs flex"><em class="dian"></em>{{mainData.end_site}}</p>
+					<p class="adrs flex"><em class="dian red"></em>{{mainData.end_site}}</p>
 					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
@@ -74,11 +74,11 @@
 			<div class="orederDetal">
 				<ul>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">派单时间</p>
+						<p class="flex">购买时间</p>
 						<p class="color3">{{mainData.create_time}}</p>
 					</li>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">购买时间</p>
+						<p class="flex">派送时间</p>
 						<p class="color3">{{mainData.start_time}}</p>
 					</li>
 				</ul>

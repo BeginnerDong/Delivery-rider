@@ -22,7 +22,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" :data-id="item.id"
 					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
@@ -70,7 +70,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
@@ -509,6 +509,7 @@
 					if(res.solely_code==100000){
 						if (res.info.data.length > 0) {
 							for (var i = 0; i < res.info.data.length; i++) {
+								res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
 								res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2)
 							};
 							self.mainData.push.apply(self.mainData, res.info.data);
