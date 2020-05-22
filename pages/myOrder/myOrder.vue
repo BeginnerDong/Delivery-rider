@@ -81,6 +81,9 @@
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
 			self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no;
+			var dayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
+			var nowTime = (new Date()).getTime() / 1000;
+			self.searchItem.finish_time=['between',[dayStart,nowTime]];
 			//self.$Utils.loadAll(['getMainData'], self);
 		},
 		
@@ -215,7 +218,7 @@
 				  moneyCount:[
 					'sum',
 					'rider_income',
-					{}
+					self.$Utils.cloneForm(self.searchItem)
 				  ],  
 				};
 				
@@ -224,11 +227,11 @@
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);
 						for (var i = 0; i < self.mainData.length; i++) {
-							self.mainData[i].finish_time = self.$Utils.timeto(self.mainData[i].finish_time*1000,'hms')
+							self.mainData[i].finish_time = self.$Utils.timeto(self.mainData[i].finish_time*1000,'ymd-hms')
 						}
-						self.dayCount = res.info.total;
-						self.moneyCount = res.info.compute.moneyCount
 					};
+					self.dayCount = res.info.total;
+					self.moneyCount = res.info.compute.moneyCount
 					console.log('self.mainData', self.mainData)
 					console.log('self.moneyCount', self.moneyCount)
 					self.$Utils.finishFunc('getMainData');

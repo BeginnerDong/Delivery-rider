@@ -22,7 +22,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" :data-id="item.id"
 					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
@@ -70,7 +70,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
@@ -113,7 +113,7 @@
 		<!-- 费用明细弹框 -->
 		<div class="black-bj" v-show="is_show"></div>
 		<div class="fxmxShow" v-show="is_moneyMxShow">
-			<div class="colseBtna" @click="moneyMxClose" style="left:0">×</div>
+			<div class="colseBtna" @click="moneyMxClose">×</div>
 			<div class="center line40">费用明细</div>
 			<div class="infor fs12 color6">
 				<p class="flexRowBetween" v-for="(item,index) in moneyMxDate">
@@ -267,7 +267,7 @@
 		
 		onShow() {
 			const self = this;
-			self.$Utils.loadAll(['getUserInfoData','getLocation'], self);
+			self.$Utils.loadAll(['getUserInfoData'], self);
 		},
 		
 		beforeDestroy() {
@@ -324,9 +324,13 @@
 				        console.log('当前位置的经度：' + res.longitude);
 				        console.log('当前位置的纬度：' + res.latitude);
 						self.userInfoUpdate()
+						self.interval = setInterval(function(){
+						  self.getMainData(true)
+						},300000)
+						self.getMainData(true)
 				    }
 				});
-				self.$Utils.finishFunc('getLocation');
+				//self.$Utils.finishFunc('getLocation');
 			},
 			
 			userInfoUpdate() {
@@ -466,10 +470,8 @@
 						self.userData = res.info.data[0];
 						if(self.userData.is_work==1){
 							self.searchItem.city_id = self.userData.city_id;
-							self.interval = setInterval(function(){
-							  self.getMainData(true)
-							},300000)
-							self.getMainData(true)
+							self.$Utils.finishFunc('getUserInfoData');
+							self.getLocation()
 						}else{
 							clearInterval(self.interval)
 							self.$Utils.finishFunc('getUserInfoData');
@@ -565,6 +567,9 @@
 			moneyMxShow(index){
 				const self = this;
 				self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData[index].main_price});
+				if(parseFloat(self.mainData[index].packing_price)>0){
+					self.moneyMxDate.push({title:'包装费',price:'￥'+self.mainData[index].packing_price})
+				};
 				if(parseFloat(self.mainData[index].distance_price)>0){
 					self.moneyMxDate.push({title:'距离附加费',price:'￥'+self.mainData[index].distance_price})
 				};
@@ -588,6 +593,9 @@
 				};
 				if(parseFloat(self.mainData[index].gratuity)>0){
 					self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData[index].gratuity})
+				};
+				if(parseFloat(self.mainData[index].delivery_reduce)>0){
+					self.moneyMxDate.push({title:'配送费减免',price:'-￥'+self.mainData[index].delivery_reduce})
 				};
 				self.moneyMxDate.push({title:'总计',price:'￥'+self.mainData[index].price})
 				self.is_show = !self.is_show

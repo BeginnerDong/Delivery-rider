@@ -11,8 +11,8 @@
 				</ul>
 			</div>
 		</div>
-		<div class="f5H5" v-if="mainData.transport_status==2"></div>
-		<div class="pdlr4" v-if="mainData.transport_status==2">
+		<div class="f5H5"></div>
+		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
 				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon4.png">位置信息</div>
 			</div>

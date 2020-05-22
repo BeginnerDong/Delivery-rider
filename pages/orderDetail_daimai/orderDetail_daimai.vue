@@ -12,8 +12,8 @@
 			</div>
 		</div>
 		
-		<div class="f5H5" v-if="mainData.transport_status==2"></div>
-		<div class="pdlr4" v-if="mainData.transport_status==2">
+		<div class="f5H5"></div>
+		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
 				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon4.png">位置信息</div>
 			</div>
@@ -87,11 +87,11 @@
 			<div class="orederDetal">
 				<ul>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">购买时间</p>
+						<p class="flex">派单时间</p>
 						<p class="color3">{{mainData.create_time}}</p>
 					</li>
 					<li class="flexRowBetween fs13 msgLis color6">
-						<p class="flex">派送时间</p>
+						<p class="flex">购买时间</p>
 						<p class="color3">{{mainData.start_time}}</p>
 					</li>
 				</ul>
