@@ -311,7 +311,7 @@
 						self.deliverFee = parseFloat(parseFloat(self.mainData.distance_price) + parseFloat(self.mainData.night_price)
 						+parseFloat(self.mainData.weather_price) + parseFloat(self.mainData.holiday_price) +
 						parseFloat(self.mainData.rush_price) + 
-						parseFloat(self.mainData.gratuity) - parseFloat(self.mainData.delivery_reduce)).toFixed(2)
+						parseFloat(self.mainData.gratuity)).toFixed(2)
 						self.$Utils.finishFunc('getMainData');
 					}      
 				};

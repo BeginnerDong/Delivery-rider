@@ -225,10 +225,11 @@
 				
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
-						self.mainData.push.apply(self.mainData, res.info.data);
-						for (var i = 0; i < self.mainData.length; i++) {
-							self.mainData[i].finish_time = self.$Utils.timeto(self.mainData[i].finish_time*1000,'ymd-hms')
+						for (var i = 0; i < res.info.data.length; i++) {
+							res.info.data[i].finish_time = self.$Utils.timeto(res.info.data[i].finish_time*1000,'ymd-hms')
 						}
+						self.mainData.push.apply(self.mainData, res.info.data);
+						
 					};
 					self.dayCount = res.info.total;
 					self.moneyCount = res.info.compute.moneyCount

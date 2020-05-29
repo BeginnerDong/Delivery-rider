@@ -22,7 +22,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" :data-id="item.id"
 					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
@@ -70,7 +70,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.price}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
@@ -326,7 +326,7 @@
 						self.userInfoUpdate()
 						self.interval = setInterval(function(){
 						  self.getMainData(true)
-						},300000)
+						},10000)
 						self.getMainData(true)
 				    }
 				});
@@ -566,10 +566,13 @@
 			
 			moneyMxShow(index){
 				const self = this;
-				self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData[index].main_price});
-				if(parseFloat(self.mainData[index].packing_price)>0){
-					self.moneyMxDate.push({title:'包装费',price:'￥'+self.mainData[index].packing_price})
+				if(self.mainData[index].type!=5&&self.mainData[index].type!=6){
+					self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData[index].main_price});
 				};
+				
+				/* if(parseFloat(self.mainData[index].packing_price)>0){
+					self.moneyMxDate.push({title:'包装费',price:'￥'+self.mainData[index].packing_price})
+				}; */
 				if(parseFloat(self.mainData[index].distance_price)>0){
 					self.moneyMxDate.push({title:'距离附加费',price:'￥'+self.mainData[index].distance_price})
 				};
@@ -594,9 +597,9 @@
 				if(parseFloat(self.mainData[index].gratuity)>0){
 					self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData[index].gratuity})
 				};
-				if(parseFloat(self.mainData[index].delivery_reduce)>0){
+				/* if(parseFloat(self.mainData[index].delivery_reduce)>0){
 					self.moneyMxDate.push({title:'配送费减免',price:'-￥'+self.mainData[index].delivery_reduce})
-				};
+				}; */
 				self.moneyMxDate.push({title:'总计',price:'￥'+self.mainData[index].price})
 				self.is_show = !self.is_show
 				self.is_moneyMxShow = !self.is_moneyMxShow
