@@ -251,7 +251,8 @@
 					user_type:0,
 					transport_status:1,
 					level:0,
-					pay_status:1
+					pay_status:1,
+					order_step:['>',0]
 				},
 				userData:{},
 				willId:'',
