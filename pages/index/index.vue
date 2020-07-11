@@ -5,7 +5,7 @@
 	
 		<!-- 标题 -->
 		<div class="T-head line50 center fs16 Tfix-head flexRowBetween T-head-Icon">
-			<div class="" @click="homeNavShow"><img class="icon" src="../../static/images/index-icon2.png" ></div>
+			<div class="" @click="homeNavShow"><img class="icon" src="/static/images/index-icon2.png" ></div>
 			<div class="Ticon1"><img class="icon" src="../../static/images/index-icon1.png" ></div>
 		</div>
 		<div class="h50"></div>
@@ -252,7 +252,7 @@
 					transport_status:1,
 					level:0,
 					pay_status:1,
-					order_step:['>',0]
+					order_step:0
 				},
 				userData:{},
 				willId:'',
@@ -327,7 +327,7 @@
 						self.userInfoUpdate()
 						self.interval = setInterval(function(){
 						  self.getMainData(true)
-						},10000)
+						},30000)
 						self.getMainData(true)
 				    }
 				});
@@ -508,8 +508,10 @@
 				if(self.current==1){
 					postData.searchItem.invalid_time = ['>',now];
 				};
+				console.log('23',postData)
 				const callback = (res) => {
 					if(res.solely_code==100000){
+						console.log('22',res)
 						if (res.info.data.length > 0) {
 							for (var i = 0; i < res.info.data.length; i++) {
 								res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
@@ -526,6 +528,7 @@
 					}
 					uni.setStorageSync('number',res.info.total)
 					self.$Utils.finishFunc('getUserInfoData');
+					console.log(234567)
 				};
 				self.$apis.orderGet(postData, callback);
 			},
