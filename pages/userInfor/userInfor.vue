@@ -7,7 +7,7 @@
 					<div class="userPhoto mgr15 oh"><img :src="submitData.mainImg[0].url" ></div>
 				</div>
 				<div class="rr flexEnd" @click="upLoadImg" v-else>
-					<div class="userPhoto mgr15 oh"><img src="../../static/images/about-img.png" ></div>
+					<div class="userPhoto mgr15 oh"><img src="static/images/about-img.png" ></div>
 				</div>
 			</div>
 			<!-- <div class="item flexRowBetween">

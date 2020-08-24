@@ -10,7 +10,7 @@
 						<div class="color2 num">({{mainData.number}})</div>
 					</div>
 					<div>
-						<image class="arrow arrowR" src="../../static/images/icon.png" mode=""></image>
+						<image class="arrow arrowR" src="static/images/icon.png" mode=""></image>
 					</div>
 				</a>
 			</div>
@@ -20,7 +20,7 @@
 					<div>到账银行卡</div>
 					<div class="flexCenter">
 						<text class="color3 font13">去添加</text>
-						<image class="arrow arrowR" src="../../static/images/icon.png" mode=""></image>
+						<image class="arrow arrowR" src="static/images/icon.png" mode=""></image>
 					</div>
 				</a>
 			</div>

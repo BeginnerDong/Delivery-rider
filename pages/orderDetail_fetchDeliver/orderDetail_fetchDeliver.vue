@@ -3,7 +3,7 @@
 		
 		<div class="pdlr4 pr">
 			<div class="pdtb10 bordB1">
-				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon.png" >物品信息</div>
+				<div class="flex Toptit"><img class="icon" src="static/images/details-icon.png" >物品信息</div>
 				<div class="fx_lableBtn">取送件</div>
 			</div>
 			<div class="orederDetal">
@@ -15,27 +15,27 @@
 		<div class="f5H5"></div>
 		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
-				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon4.png">位置信息</div>
+				<div class="flex Toptit"><img class="icon" src="static/images/details-icon4.png">位置信息</div>
 			</div>
 			<div class="fs13 GprsMsg pdtb10 bordB1">
 				<div class="item flexRowBetween mgb10">
 					<p class="adrs flex"><em class="dian"></em>{{mainData.start_site}}</p>
-					<span class="flexEnd" @click="openMap(mainData.start_latitude,mainData.start_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
+					<span class="flexEnd" @click="openMap(mainData.start_latitude,mainData.start_longitude)"><img class="Ricon" src="static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
 					<p class="adrs flex">{{mainData.start_name}}&nbsp;{{mainData.start_phone}}</p>
-					<span class="flexEnd" @click="callPhone(mainData.start_phone)"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
+					<span class="flexEnd" @click="callPhone(mainData.start_phone)"><img class="Ricon" src="static/images/the_order_details-icon8.png"></span>
 				</div>
 			</div>
 			
 			<div class="fs13 GprsMsg pdtb10">
 				<div class="item flexRowBetween mgb10">
 					<p class="adrs flex"><em class="dian red"></em>{{mainData.end_site}}</p>
-					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="../../static/images/the_order_details-icon7.png"></span>
+					<span class="flexEnd" @click="openMap(mainData.end_latitude,mainData.end_longitude)"><img class="Ricon" src="static/images/the_order_details-icon7.png"></span>
 				</div>
 				<div class="item flexRowBetween">
-					<p class="adrs flex" @click="callPhone(mainData.end_phone)">{{mainData.end_name}}&nbsp;{{mainData.end_phone}}</p>
-					<span class="flexEnd"><img class="Ricon" src="../../static/images/the_order_details-icon8.png"></span>
+					<p class="adrs flex">{{mainData.end_name}}&nbsp;{{mainData.end_phone}}</p>
+					<span class="flexEnd" @click="callPhone(mainData.end_phone)"><img class="Ricon" src="static/images/the_order_details-icon8.png"></span>
 				</div>
 			</div>
 		</div>
@@ -43,7 +43,7 @@
 		<div class="f5H5"></div>
 		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
-				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon1.png">备注信息</div>
+				<div class="flex Toptit"><img class="icon" src="static/images/details-icon1.png">备注信息</div>
 			</div>
 			<div class="pdtb10 fs13 color6">{{mainData.passage1}}</div>
 		</div>
@@ -51,7 +51,7 @@
 		
 		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
-				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon2.png">费用明细</div>
+				<div class="flex Toptit"><img class="icon" src="static/images/details-icon2.png">费用明细</div>
 			</div>
 			<div class="orederDetal">
 				<ul>
@@ -60,7 +60,7 @@
 						<p class="color3">{{item.price}}元</p>
 					</li>
 					<li class="flexEnd red">
-						合计<span class="price">{{mainData.price}}</span>
+						合计<span class="price">{{mainData.realPrice}}</span>
 					</li>
 				</ul>
 			</div>
@@ -69,7 +69,7 @@
 		<div class="f5H5"></div>
 		<div class="pdlr4">
 			<div class="pdtb10 bordB1">
-				<div class="flex Toptit"><img class="icon" src="../../static/images/details-icon3.png">派送时间</div>
+				<div class="flex Toptit"><img class="icon" src="static/images/details-icon3.png">派送时间</div>
 			</div>
 			<div class="orederDetal">
 				<ul>
@@ -210,9 +210,10 @@
 			
 			openMap(latitude,longitude){
 				const self = this;
+				var newObject = self.$Utils.bMapTransQQMap(longitude,latitude)
 				 uni.openLocation({
-					latitude: parseFloat(latitude),
-					longitude: parseFloat(longitude),
+					latitude: parseFloat(newObject.lat),
+					longitude: parseFloat(newObject.lng),
 					success: function () {
 						console.log('success');
 					}
@@ -236,6 +237,7 @@
 				    console.log('getMainData', res);
 					if(res.info.data.length>0){
 						self.mainData = res.info.data[0];
+						self.mainData.realPrice =  (parseFloat(self.mainData.price)  - parseFloat(self.mainData.coupon_reduce)).toFixed(2)
 						self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData.main_price});
 						if(parseFloat(self.mainData.distance_price)>0){
 							self.moneyMxDate.push({title:'距离附加费',price:'￥'+self.mainData.distance_price})
@@ -263,6 +265,9 @@
 						};
 						if(parseFloat(self.mainData.member_reduce)>0){
 							self.moneyMxDate.push({title:'会员抵扣',price:'-￥'+self.mainData.member_reduce})
+						};
+						if(parseFloat(self.mainData.coupon_reduce)>0){
+							self.moneyMxDate.push({title:'优惠券抵扣',price:'-￥'+self.mainData.coupon_reduce})
 						};
 						self.$Utils.finishFunc('getMainData');
 					}      

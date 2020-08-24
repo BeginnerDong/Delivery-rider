@@ -42,7 +42,7 @@
 					status:['in',[0,1]],
 					behavior:1,
 					withdraw:0,
-					count:['>',0]
+					//count:['>',0]
 				},
 				userInfoData:{},
 				mainData:[],

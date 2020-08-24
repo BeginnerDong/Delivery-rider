@@ -12,17 +12,17 @@
 				<div class="seltBox">
 					
 					<div class="L" :data-id="item.id" @click="updateCard($event.currentTarget.dataset.id)">
-						<img class="icon" :src="item.isdefault==1?'../../static/images/card-icon.png':'../../static/images/card-icon1.png'">
+						<img class="icon" :src="item.isdefault==1?'static/images/card-icon.png':'static/images/card-icon1.png'">
 						默认银行卡
 					</div>
 					
 					<div class="R fs12">
 						<a class="child" :data-id="item.id" 
 						@click="Router.navigateTo({route:{path:'/pages/myBankCard_add/myBankCard_add?id='+$event.currentTarget.dataset.id}})">
-							<img  src="../../static/images/card-icon3.png" mode=""></image>编辑
+							<img  src="static/images/card-icon3.png" mode=""></image>编辑
 						</a>
 						<div class="child" :data-id="item.id" @click="deleteCard($event.currentTarget.dataset.id)">
-							<img  src="../../static/images/card-icon2.png" mode=""></image>删除
+							<img  src="static/images/card-icon2.png" mode=""></image>删除
 						</div>
 					</div>
 				</div>

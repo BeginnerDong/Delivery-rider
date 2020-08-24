@@ -6,7 +6,7 @@
 		</div>
 		<div class="jifenTwoNum flexRowBetween boxShaow radius5">
 			<div class="item">
-				<p class="pdb5 flexCenter">开始时间<img class="arrow" src="../../static/images/the_order-icon1.png"></p>
+				<p class="pdb5 flexCenter">开始时间<img class="arrow" src="static/images/the_order-icon1.png"></p>
 				<div class="num fs12">
 					<!-- <picker mode="date" :value='start' @change="changeStartTime">
 						{{start==''?'请选择':start}} 
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 			<div class="item">
-				<p class="pdb5  flexCenter">结束时间<img class="arrow" src="../../static/images/the_order-icon1.png"></p>
+				<p class="pdb5  flexCenter">结束时间<img class="arrow" src="static/images/the_order-icon1.png"></p>
 				<div class="num fs12">
 					<dyDatePicker placeholder="请选择" :childValue="end" :minSelect="to_minSelect" :maxSelect="to_maxSelect"
 					:iconshow="false" @getData="changeEndTime"></dyDatePicker>

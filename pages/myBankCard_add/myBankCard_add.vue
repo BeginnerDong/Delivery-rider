@@ -34,8 +34,8 @@
 					<div class="name fs13" style="width: 50%;">设为默认银行卡</div>
 					<div class="edit" style="width:50%;text-align: right">
 						<switch @change="choose" :checked="submitData.isdefault==1?true:false" color="#2FA0ED"></switch>
-						<!-- <img v-if="!is_show" class="mmIcon" src="../../static/images/address-icon03.png" alt="">
-						<img v-if="is_show" class="mmIcon" src="../../static/images/address-icon02.png" alt=""> -->
+						<!-- <img v-if="!is_show" class="mmIcon" src="static/images/address-icon03.png" alt="">
+						<img v-if="is_show" class="mmIcon" src="static/images/address-icon02.png" alt=""> -->
 					</div>
 				</li>	
 			</ul>

@@ -27,7 +27,7 @@ export default {
 	
 		var custom_header = {'content-type': 'application/json',};
 		var array = obj.url.split('/');
-		if(array[2]&&array[2]=='get'){
+		if(array[2]&&array[2]=='get'&&!obj.data.noShowLoading){
 			uni.showLoading({
 				title: '加载中',
 				mask: true

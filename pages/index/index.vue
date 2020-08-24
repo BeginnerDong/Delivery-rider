@@ -5,8 +5,8 @@
 	
 		<!-- 标题 -->
 		<div class="T-head line50 center fs16 Tfix-head flexRowBetween T-head-Icon">
-			<div class="" @click="homeNavShow"><img class="icon" src="/static/images/index-icon2.png" ></div>
-			<div class="Ticon1"><img class="icon" src="../../static/images/index-icon1.png" ></div>
+			<div class="" @click="homeNavShow"><img class="icon" src="static/images/index-icon2.png" ></div>
+			<div class="Ticon1"><img class="icon" src="static/images/index-icon1.png" ></div>
 		</div>
 		<div class="h50"></div>
 		
@@ -22,7 +22,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd"  @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" :data-id="item.id"
 					@click="Router.navigateTo({route:{path:'/pages/orderDetail_waimai/orderDetail_waimai?id='+$event.currentTarget.dataset.id}})">
@@ -70,7 +70,7 @@
 					<div class="datt flexRowBetween bordB1">
 						<h1 class="left fs14" v-if="item.transport_status==1">剩余接单时间{{item.min}}分钟</h1>
 						<h1 class="left fs14" v-if="item.transport_status==2">配送中</h1>
-						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="../../static/images/icon.png" alt=""> </div>
+						<div class="price flexEnd" @click="moneyMxShow(index)">{{item.rider_income}}<img class="arrowR" src="static/images/icon.png" alt=""> </div>
 					</div>
 					<a class="infor mglr4" 
 					@click="toDetail(item.type,item.id)">
@@ -80,7 +80,7 @@
 								<span class="adrsMs ftw">{{item.start_site}}</span>
 							</p>
 							<p class="flex line" v-if="item.type!=2">
-								<em class="fs12 color6 ftn range">{{item.type!=3?item.total_distance:'0'}}km</em><em class="dian red"></em>
+								<em class="fs12 color6 ftn range">{{item.total_distance}}km</em><em class="dian red"></em>
 								<span class="adrsMs ftw">{{item.end_site}}</span>
 							</p>
 							<p class="flex line">
@@ -116,7 +116,7 @@
 			<div class="colseBtna" @click="moneyMxClose">×</div>
 			<div class="center line40">费用明细</div>
 			<div class="infor fs12 color6">
-				<p class="flexRowBetween" v-for="(item,index) in moneyMxDate">
+				<p class="flexRowBetween" v-for="(item,index) in moneyMxDate" :key="index">
 					<span>{{item.title}}<i class="color9 mgl10">{{item.range}}</i></span>
 					<em class="red">{{item.price}}</em>
 				</p>
@@ -156,7 +156,7 @@
 							<img :src="userData.info.mainImg[0].url" >
 						</div>
 						<div class="userPhoto mgr15" style="overflow: hidden;" v-else>
-							<img src="../../static/images/about-img.png" >
+							<img src="static/images/about-img.png" >
 						</div>
 						<div class="Msg">
 							<p class="mgb5">{{userData.info?userData.info.name:''}}</p>
@@ -164,12 +164,12 @@
 						</div>
 					</div>
 					<a class="right pdtb10" style="width: 10%;" @click="Router.navigateTo({route:{path:'/pages/userInfor/userInfor'}})">
-						<img class="arrowR" src="../../static/images/icon.png" >
+						<img class="arrowR" src="static/images/icon.png" >
 					</a>
 				</div>
 				<div class="info flexRowBetween">
 					<div class="flex">
-						<img class="icon" src="../../static/images/about-icon1.png">
+						<img class="icon" src="static/images/about-icon1.png">
 						<span class="tt">开启接单/关闭收工</span>
 					</div>
 					<div class="right">
@@ -179,44 +179,44 @@
 				<div class="info">
 					<a class="flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/myOrder/myOrder'}})">
 						<div class="flex">
-							<img class="icon" src="../../static/images/about-icon3.png">
+							<img class="icon" src="static/images/about-icon3.png">
 							<span class="tt">我的订单</span>
 						</div>
 						<div class="right">
-							<img class="arrowR" src="../../static/images/icon.png" >
+							<img class="arrowR" src="static/images/icon.png" >
 						</div>
 					</a>
 				</div>
 				<div class="info">
 					<a class="flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/myIncome/myIncome'}})">
 						<div class="flex">
-							<img class="icon" src="../../static/images/about-icon4.png">
+							<img class="icon" src="static/images/about-icon4.png">
 							<span class="tt">我的收入</span>
 						</div>
 						<div class="right">
-							<img class="arrowR" src="../../static/images/icon.png" >
+							<img class="arrowR" src="static/images/icon.png" >
 						</div>
 					</a>
 				</div>
 				<div class="info">
 					<a class="flexRowBetween"  @click="Router.navigateTo({route:{path:'/pages/myExtension/myExtension'}})">
 						<div class="flex">
-							<img class="icon" src="../../static/images/about-icon5.png">
+							<img class="icon" src="static/images/about-icon5.png">
 							<span class="tt">我的推广</span>
 						</div>
 						<div class="right">
-							<img class="arrowR" src="../../static/images/icon.png" >
+							<img class="arrowR" src="static/images/icon.png" >
 						</div>
 					</a>
 				</div>
 				<div class="info">
 					<a class="flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/myNotice/myNotice'}})">
 						<div class="flex">
-							<img class="icon" src="../../static/images/about-icon6.png">
+							<img class="icon" src="static/images/about-icon6.png">
 							<span class="tt">通知中心</span>
 						</div>
 						<div class="right">
-							<img class="arrowR" src="../../static/images/icon.png" >
+							<img class="arrowR" src="static/images/icon.png" >
 						</div>
 					</a>
 				</div>
@@ -243,6 +243,12 @@
 				moneyMxDate:[
 					
 				],
+				paginate:{
+					count: 0,
+					currentPage: 1,
+					pagesize: 10,
+					is_page: true,
+				},
 				is_deltAlertShow:false,
 				is_sdSuccess:false,
 				is_homeNav:false,
@@ -263,32 +269,28 @@
 		
 		onLoad() {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.paginate);
+			//self.$Utils.loadAll(['getMainData'], self);
 		},
 		
 		onShow() {
 			const self = this;
+			if (uni.getStorageSync('intervalId')) {
+				clearInterval(uni.getStorageSync('intervalId'));
+			};
+			uni.removeStorageSync('intervalId');
 			self.$Utils.loadAll(['getUserInfoData'], self);
 		},
 		
-		beforeDestroy() {
-			const self = this;
-			console.log(232)
-			clearInterval(self.interval)
-		},
 		
-		onUnload() {
+		/* onReachBottom() {
+			console.log('onReachBottom')
 			const self = this;
-			console.log(232)
-			clearInterval(self.interval)
-		},
-		
-		onHide() {
-			const self = this;
-			console.log(232)
-			clearInterval(self.interval)
-		},
-		
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		}, */
 		
 		
 		
@@ -316,6 +318,7 @@
 			
 			getLocation(){
 				const self = this;
+				
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
@@ -325,9 +328,11 @@
 				        console.log('当前位置的经度：' + res.longitude);
 				        console.log('当前位置的纬度：' + res.latitude);
 						self.userInfoUpdate()
-						self.interval = setInterval(function(){
-						  self.getMainData(true)
-						},30000)
+						self.interval = setInterval(function() {
+							self.getMainData(true)
+
+						}, 30000);
+						uni.setStorageSync('intervalId', self.interval)
 						self.getMainData(true)
 				    }
 				});
@@ -389,9 +394,7 @@
 					if (data.solely_code == 100000) {
 						uni.setStorageSync('canClick', true);
 						self.sdSuccessShow();
-						setTimeout(function() {
-							self.getMainData(true)
-						}, 1000);
+						self.getMainData(true)
 					} else {
 						uni.setStorageSync('canClick', true);
 						self.$Utils.showToast(data.msg, 'none', 1000)
@@ -505,6 +508,7 @@
 				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
 				postData.latitude = parseFloat(self.melatitude);
 				postData.longitude = parseFloat(self.melongitude);
+				postData.noShowLoading = true;
 				if(self.current==1){
 					postData.searchItem.invalid_time = ['>',now];
 				};
@@ -515,7 +519,9 @@
 						if (res.info.data.length > 0) {
 							for (var i = 0; i < res.info.data.length; i++) {
 								res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
-								res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2)
+								res.info.data[i].distance_to_start = parseFloat(res.info.data[i].distance_to_start/1000).toFixed(2);
+								res.info.data[i].realPrice = (parseFloat(res.info.data[i].price)  - parseFloat(res.info.data[i].coupon_reduce)).toFixed(2)
+					
 							};
 							self.mainData.push.apply(self.mainData, res.info.data);
 						};
@@ -524,8 +530,10 @@
 					};
 					
 					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))&&self.current==1){
-						self.checkTotal()
+						//self.checkTotal()
+						console.log('通知')
 					}
+					console.log('number',res.info.total)
 					uni.setStorageSync('number',res.info.total)
 					self.$Utils.finishFunc('getUserInfoData');
 					console.log(234567)
@@ -544,16 +552,19 @@
 				if(current!=self.current){
 					self.current = current;
 					if(self.current==1){
-						self.interval = setInterval(function(){
-						  self.getMainData(true)
-						},30000)
+						self.interval = setInterval(function() {
+							self.getMainData(true)
+							//self.time++
+							 //console.log(self.time)
+						}, 30000);
+						uni.setStorageSync('intervalId', self.interval)
 						delete self.searchItem.rider_no;
 						self.searchItem.transport_status = 1;
 					}else if(self.current==2){
 						self.searchItem.transport_status = 2;
 						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no;
-						clearInterval(self.interval)
-						console.log(self.interval)
+						clearInterval(uni.getStorageSync('intervalId'));
+						uni.removeStorageSync('intervalId');
 					};
 					if(self.userData.is_work==1){
 						self.getMainData(true)
@@ -574,9 +585,12 @@
 					self.moneyMxDate.push({title:'基础配送费',price:'￥'+self.mainData[index].main_price});
 				};
 				
-				/* if(parseFloat(self.mainData[index].packing_price)>0){
+				if(parseFloat(self.mainData[index].packing_price)>0){
 					self.moneyMxDate.push({title:'包装费',price:'￥'+self.mainData[index].packing_price})
-				}; */
+				};
+				if(parseFloat(self.mainData[index].time_price)>0){
+					self.moneyMxDate.push({title:'时长附加',price:'￥'+self.mainData[index].time_price})
+				};
 				if(parseFloat(self.mainData[index].distance_price)>0){
 					self.moneyMxDate.push({title:'距离附加费',price:'￥'+self.mainData[index].distance_price})
 				};
@@ -601,10 +615,16 @@
 				if(parseFloat(self.mainData[index].gratuity)>0){
 					self.moneyMxDate.push({title:'小费',price:'￥'+self.mainData[index].gratuity})
 				};
-				/* if(parseFloat(self.mainData[index].delivery_reduce)>0){
+				if(parseFloat(self.mainData[index].delivery_reduce)>0){
 					self.moneyMxDate.push({title:'配送费减免',price:'-￥'+self.mainData[index].delivery_reduce})
-				}; */
-				self.moneyMxDate.push({title:'总计',price:'￥'+self.mainData[index].price})
+				};
+				if(parseFloat(self.mainData[index].member_reduce)>0){
+					self.moneyMxDate.push({title:'会员抵扣',price:'-￥'+self.mainData[index].member_reduce})
+				};
+				if(parseFloat(self.mainData[index].coupon_reduce)>0){
+					self.moneyMxDate.push({title:'优惠券抵扣',price:'-￥'+self.mainData[index].coupon_reduce})
+				};
+				self.moneyMxDate.push({title:'总计',price:'￥'+self.mainData[index].realPrice})
 				self.is_show = !self.is_show
 				self.is_moneyMxShow = !self.is_moneyMxShow
 			},
@@ -618,9 +638,28 @@
 			
 			deltAlert(index){
 				const self = this;
-				self.willId = self.mainData[index].id;
-				self.willIndex = index;
-				self.is_deltAlertShow=!self.is_deltAlertShow;
+				const postData = {};
+				postData.tokenFuncName = 'getRiderToken'
+				postData.searchItem = {
+					id:self.mainData[index].id,
+					user_type:0
+				};
+				var callback = function(res){
+				    console.log('getMainData', res);
+					if(res.info.data.length>0){
+						if(res.info.data[0].rider_no!=''){
+							self.$Utils.showToast('该订单已被其他骑手抢到', 'none');
+							self.setTimeout(function() {
+								self.mainData.splice(parseInt(index),1)
+							}, 1000);
+						}else{
+							self.willId = self.mainData[index].id;
+							self.willIndex = index;
+							self.is_deltAlertShow=!self.is_deltAlertShow;
+						}
+					}      
+				};
+				self.$apis.orderGet(postData, callback);
 			},
 			
 			sdSuccessShow(){
