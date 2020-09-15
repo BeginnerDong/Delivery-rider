@@ -18,7 +18,13 @@
             "delay" : 0
         },
         "modules" : {
-            "Push" : {},
+            "Push" : {
+                "igexin" : {
+                    "appid" : "123",
+                    "appkey" : "123",
+                    "appsecret" : "123"
+                }
+            },
             "Maps" : {}
         },
         /* 模块配置 */
@@ -60,7 +66,14 @@
                         "appkey_android" : "fZMKVoEKzUCDvmUH5vI5Kmjde7FqaxHc"
                     }
                 },
-                "ad" : {}
+                "ad" : {},
+                "push" : {
+                    "igexin" : {
+                        "appid" : "123",
+                        "appkey" : "123",
+                        "appsecret" : "123"
+                    }
+                }
             },
             "icons" : {
                 "android" : {

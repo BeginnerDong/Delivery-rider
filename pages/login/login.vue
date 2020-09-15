@@ -45,7 +45,10 @@
 		onLoad(options) {
 			const self = this;
 			uni.hideLoading();
-			
+			if (uni.getStorageSync('intervalId')) {
+				clearInterval(uni.getStorageSync('intervalId'));
+			};
+			uni.removeStorageSync('intervalId');
 			if (uni.getStorageSync('riderToken')) {
 				uni.redirectTo({
 					url: '/pages/index/index'
@@ -53,6 +56,14 @@
 			}else{
 				self.showAll = true
 			}
+		},
+		
+		onShow(){
+			const self = this;
+			if (uni.getStorageSync('intervalId')) {
+				clearInterval(uni.getStorageSync('intervalId'));
+			};
+			uni.removeStorageSync('intervalId');
 		},
 		
 		methods: {

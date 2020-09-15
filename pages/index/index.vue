@@ -10,11 +10,14 @@
 		</div>
 		<div class="h50"></div>
 		
-		<div class="orderNav boxShaow" style="top:80px">
-			<div class="tt" :class="current==1?'on':''" @click="change('1')">新任务</div>
+		<div class="orderNav boxShaow" style="top:80px" v-if="!noClick">
+			<div class="tt" :class="current==1?'on':''"  @click="change('1')">新任务</div>
 			<div class="tt" :class="current==2?'on':''" @click="change('2')">待送达</div>
 		</div>
-		
+		<div class="orderNav boxShaow" style="top:80px" v-if="noClick">
+			<div class="tt" :class="current==1?'on':''" >新任务</div>
+			<div class="tt" :class="current==2?'on':''" >待送达</div>
+		</div>
 		<div class="orderList pdlr4" style="margin-top: 85px;"  v-if="userData.is_work==1">
 			<ul>
 				<!-- 外卖送餐 -->
@@ -49,7 +52,7 @@
 							</p>
 						</div>
 						<div class="msg mglr10 pr radius5 fs12" v-if="item.type==6">
-							<p class="child  flexRowBetween" v-for="c_item in item.child[0]">
+							<p class="child  flexRowBetween" v-for="(c_item,c_index) in item.child[0]" :key="c_index">
 								<span class="tit avoidOverflow">{{c_item.title}}</span>
 								<span class="num">×{{c_item.count}}</span>
 								<span class="mny">￥{{c_item.unit_price}}</span>
@@ -262,8 +265,8 @@
 				},
 				userData:{},
 				willId:'',
-				willIndex:-1
-				
+				willIndex:-1,
+				noClick:false
 			}
 		},
 		
@@ -271,10 +274,12 @@
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.paginate);
 			//self.$Utils.loadAll(['getMainData'], self);
+			
 		},
 		
 		onShow() {
 			const self = this;
+			uni.hideLoading();
 			if (uni.getStorageSync('intervalId')) {
 				clearInterval(uni.getStorageSync('intervalId'));
 			};
@@ -283,18 +288,25 @@
 		},
 		
 		
-		/* onReachBottom() {
+		onReachBottom() {
 			console.log('onReachBottom')
 			const self = this;
 			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
 				self.paginate.currentPage++;
 				self.getMainData()
 			};
-		}, */
+		},
 		
+		onPullDownRefresh() {
+			const self = this;
+			console.log('refresh'),
+			self.getMainData(true)	
+		},
 		
 		
 		methods: {
+			
+			
 			
 			loginOff(){
 				const self = this;
@@ -304,6 +316,7 @@
 					showCancel:true,
 					success(res) {
 						if(res.confirm){
+							
 							uni.removeStorageSync('riderToken');
 							uni.removeStorageSync('riderInfo');
 							uni.redirectTo({
@@ -318,7 +331,7 @@
 			
 			getLocation(){
 				const self = this;
-				
+				//self.getMainData(true)
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
@@ -350,6 +363,7 @@
 					latitude:self.melatitude,
 					longitude:self.melongitude
 				};
+				postData.noShowLoading = true;
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {
 						console.log('更新位置成功')
@@ -474,7 +488,7 @@
 						self.userData = res.info.data[0];
 						if(self.userData.is_work==1){
 							self.searchItem.city_id = self.userData.city_id;
-							self.$Utils.finishFunc('getUserInfoData');
+							//self.$Utils.finishFunc('getUserInfoData');
 							self.getLocation()
 						}else{
 							clearInterval(self.interval)
@@ -514,6 +528,7 @@
 				};
 				console.log('23',postData)
 				const callback = (res) => {
+					self.noClick = false;
 					if(res.solely_code==100000){
 						console.log('22',res)
 						if (res.info.data.length > 0) {
@@ -528,28 +543,34 @@
 					}else{
 						self.$Utils.showToast(res.msg, 'none')
 					};
-					
+					uni.stopPullDownRefresh();
+					uni.hideLoading();
 					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))&&self.current==1){
-						//self.checkTotal()
+						self.checkTotal()
 						console.log('通知')
 					}
 					console.log('number',res.info.total)
-					uni.setStorageSync('number',res.info.total)
+					if(self.current==1){
+						console.log('add')
+						uni.setStorageSync('number',res.info.total)
+					}
 					self.$Utils.finishFunc('getUserInfoData');
 					console.log(234567)
+					
 				};
 				self.$apis.orderGet(postData, callback);
 			},
 			
 			checkTotal(){
 				const self = this;
-				self.$Utils.finishFunc('getUserInfoData');
 				plus.push.createMessage("您有新的订单！");
 			},
 			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
+					self.noClick = true;
+					uni.showLoading();
 					self.current = current;
 					if(self.current==1){
 						self.interval = setInterval(function() {
@@ -561,6 +582,7 @@
 						delete self.searchItem.rider_no;
 						self.searchItem.transport_status = 1;
 					}else if(self.current==2){
+						self.noClick = false;
 						self.searchItem.transport_status = 2;
 						self.searchItem.rider_no = uni.getStorageSync('riderInfo').user_no;
 						clearInterval(uni.getStorageSync('intervalId'));

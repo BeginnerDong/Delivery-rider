@@ -135,7 +135,7 @@
 					};
 					self.$Utils.finishFunc('getUserInfoData');
 				};
-				self.$apis.userInfoGet(postData, callback);
+				self.$apis.userGet(postData, callback);
 			},
 			
 			confirm() {
@@ -156,6 +156,7 @@
 				const callback = (data) => {				
 					if (data.solely_code == 100000) {
 						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('确认送达成功', 'none', 1000)
 						setTimeout(function() {
 							uni.navigateBack({
 								delta:1
@@ -171,34 +172,57 @@
 			
 			orderUpdate() {
 				const self = this;
-				
 				const postData = {};
-				postData.tokenFuncName = 'getRiderToken';
+				postData.tokenFuncName = 'getRiderToken'
 				postData.searchItem = {
 					id:self.mainData.id,
-					user_type:0,
-					thirdapp_id:['in',[2,3]]
+					user_type:0
 				};
-				postData.data = {
-					transport_status:2,
-					rider_no:self.userInfoData.user_no,
-					thirdapp_id:self.mainData.thirdapp_id
+				var callback = function(res){
+				    console.log('getMainData', res);
+					if(res.info.data.length>0){
+						if(res.info.data[0].rider_no!=''){
+							self.$Utils.showToast('该订单已被其他骑手抢到', 'none');
+							self.setTimeout(function() {
+								uni.navigateBack({
+									delta:1
+								})
+							}, 1000);
+						}else{
+							const c_postData = {};
+							c_postData.tokenFuncName = 'getRiderToken';
+							c_postData.searchItem = {
+								id:self.mainData.id,
+								user_type:0,
+								thirdapp_id:['in',[2,3]]
+							};
+							c_postData.data = {
+								transport_status:2,
+								rider_no:self.userInfoData.user_no,
+								thirdapp_id:self.mainData.thirdapp_id
+							};
+							console.log('c_postData',c_postData)
+							return
+							const c_callback = (data) => {				
+								if (data.solely_code == 100000) {
+									uni.setStorageSync('canClick', true);
+									self.$Utils.showToast('接单成功', 'none')
+									setTimeout(function() {
+										uni.navigateBack({
+											delta:1
+										})
+									}, 1000);
+								} else {
+									uni.setStorageSync('canClick', true);
+									self.$Utils.showToast(data.msg, 'none', 1000)
+								}	
+								
+							};
+							self.$apis.orderUpdate(c_postData, c_callback);
+						}
+					}      
 				};
-				const callback = (data) => {				
-					if (data.solely_code == 100000) {
-						uni.setStorageSync('canClick', true);
-						self.$Utils.showToast('接单成功', 'none')
-						setTimeout(function() {
-							uni.navigateBack({
-								delta:1
-							})
-						}, 1000);
-					} else {
-						uni.setStorageSync('canClick', true);
-						self.$Utils.showToast(data.msg, 'none', 1000)
-					}	
-				};
-				self.$apis.orderUpdate(postData, callback);
+				self.$apis.orderGet(postData, callback);
 			},
 			
 			callPhone(phone){

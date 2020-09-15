@@ -6,6 +6,7 @@
 				"navigationBarTitleText": "登录",//设置页面标题文字
 				"onReachBottomDistance":100
 				//"navigationStyle":"custom" //标题隐藏
+				
 			}
 		},
 		{
@@ -21,7 +22,9 @@
 			"style": {
 				"navigationBarTitleText": "首页",//设置页面标题文字
 				"onReachBottomDistance":100,
-				"navigationStyle":"custom" //标题隐藏
+				"navigationStyle":"custom" ,//标题隐藏
+				"enablePullDownRefresh": true
+				
 			}
 		},
 		{
