@@ -38,29 +38,6 @@
 				})
 				//判断用户是否授权"保存到相册"
 				self.savePhoto()
-				/* uni.getSetting({
-					success(res) {
-						//没有权限，发起授权
-						if (!res.authSetting['scope.writePhotosAlbum']) {
-							uni.authorize({
-								scope: 'scope.writePhotosAlbum',
-								success() { //用户允许授权，保存图片到相册
-									self.savePhoto();
-								},
-								fail() { //用户点击拒绝授权，跳转到设置页，引导用户授权
-								console.log('fail')
-									uni.showToast({
-										icon: 'none',
-										title: '请至小程序设置中开启相册权限',
-										duration: 1000
-									})
-								}
-							})
-						} else { //用户已授权，保存到相册
-							self.savePhoto()
-						}
-					}
-				}) */
 			},
 			//保存图片到相册，提示保存成功
 			savePhoto() {

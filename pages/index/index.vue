@@ -331,7 +331,6 @@
 			
 			getLocation(){
 				const self = this;
-				//self.getMainData(true)
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
@@ -341,15 +340,10 @@
 				        console.log('当前位置的经度：' + res.longitude);
 				        console.log('当前位置的纬度：' + res.latitude);
 						self.userInfoUpdate()
-						self.interval = setInterval(function() {
-							self.getMainData(true)
-
-						}, 30000);
-						uni.setStorageSync('intervalId', self.interval)
 						self.getMainData(true)
+						uni.setStorageSync('intervalId', self.interval)
 				    }
 				});
-				//self.$Utils.finishFunc('getLocation');
 			},
 			
 			userInfoUpdate() {
@@ -489,6 +483,9 @@
 						if(self.userData.is_work==1){
 							self.searchItem.city_id = self.userData.city_id;
 							//self.$Utils.finishFunc('getUserInfoData');
+							self.interval = setInterval(function() {
+								self.getLocation()
+							}, 30000);
 							self.getLocation()
 						}else{
 							clearInterval(self.interval)
@@ -574,10 +571,9 @@
 					self.current = current;
 					if(self.current==1){
 						self.interval = setInterval(function() {
-							self.getMainData(true)
-							//self.time++
-							 //console.log(self.time)
+							self.getLocation()
 						}, 30000);
+						//self.getLocation();
 						uni.setStorageSync('intervalId', self.interval)
 						delete self.searchItem.rider_no;
 						self.searchItem.transport_status = 1;
