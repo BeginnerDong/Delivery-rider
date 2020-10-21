@@ -3,7 +3,7 @@
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
 			<div class="bigNum pd10">{{allCount}}<em class="fs12">元</em></div>
 			<div class="yuan pdb20 fs13">奖励余额</div>
-			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=2'}})">提现</a>
+			<a class="txBtn" @click="Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=2&money='+allCount}})">提现</a>
 		</div>
 		<div class="orderBetween">
 			<div class="item flexRowBetween" v-for="(item,index) in mainData" :key="index">
@@ -118,7 +118,7 @@
 					all: [
 						'sum',
 						'count',
-						{type: 2,status: ['in', [0, 1]],behavior: 2,withdraw:0,user_no:uni.getStorageSync('riderInfo').user_no}
+						{type: 2,status: ['in', [0, 1]],behavior: 2,user_no:uni.getStorageSync('riderInfo').user_no}
 					],
 					has: [
 						'sum',

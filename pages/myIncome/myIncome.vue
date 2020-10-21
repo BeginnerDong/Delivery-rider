@@ -2,7 +2,7 @@
 	<div>
 		
 		<div class="myExtendTop white center" style="padding-bottom: 30px;">
-			<div class="bigNum pd10">{{userInfoData.balance}}</div>
+			<div class="bigNum pd10">{{allCount}}</div>
 			<div class="yuan pdb20 fs13">可提现金额(元)</div>
 			<a class="txBtn" @click="goCash()">提现</a>
 		</div>
@@ -84,9 +84,9 @@
 			goCash(){
 				const self = this;
 				if(self.current==1){
-					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=1'}})
+					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=1&money='+self.allCount}})
 				}else if(self.current==2){
-					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=0'}})
+					self.Router.navigateTo({route:{path:'/pages/myCashOut/myCashOut?behavior=0&money='+self.allCount}})
 				}
 			},
 			
@@ -142,9 +142,27 @@
 				  all:[
 					'sum',
 					'count',
-					self.$Utils.cloneForm(self.searchItem)
+					/* self.$Utils.cloneForm(self.searchItem) */
+					{type:2,
+					status:['in',[0,1]],
+					}
+				  ],
+				  has: [
+				  	'sum',
+				  	'count',
+				  	{type: 2,status: ['in', [0, 1]],withdraw:1}
 				  ],
 				};
+				postData.compute.all[2].user_no = uni.getStorageSync('riderInfo').user_no
+				if(self.current==1){
+					postData.compute.all[2].behavior = 1
+					
+					postData.compute.has[2].behavior = 1
+				}else{
+					postData.compute.all[2].behavior = 0
+					
+					postData.compute.has[2].behavior = 0
+				}
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);

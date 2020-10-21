@@ -124,7 +124,7 @@
 			<button class="btn">立即接单</button>
 		</div>
 		
-		<div class="detal_b_bar submitbtn" @click="confirm()" v-if="mainData.transport_status==2">
+		<div class="detal_b_bar submitbtn" @click="Utils.stopMultiClick(confirm)" v-if="mainData.transport_status==2">
 			<button class="btn">确认送达</button>
 		</div>
 		
@@ -156,7 +156,8 @@
 					
 				],
 				is_deltAlertShow:false,
-				deliverFee:0
+				deliverFee:0,
+				Utils:this.$Utils
 			}
 		},
 		onLoad(options) {
@@ -207,6 +208,7 @@
 			
 			confirm() {
 				const self = this;
+				uni.setStorageSync('canClick', false);
 				var now = Date.parse(new Date())/1000;
 				const postData = {};
 				postData.tokenFuncName = 'getRiderToken';

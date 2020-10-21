@@ -169,15 +169,13 @@ export default {
 	finishFunc(funcName) {
 		uni.setStorageSync('canClick', true);
 		var loadArray = uni.getStorageSync('loadAllArray');
-		console.log('loadArray',loadArray)
-		console.log('loadArray',loadArray.length)
+		
 		if (loadArray && loadArray.length > 0) {
 			var length = loadArray.indexOf(funcName);
 			console.log('length',length)
 			if (length >= 0) {
 				loadArray.splice(length, 1);
-				console.log('finishFunc');
-				console.log('loadArray',loadArray)
+				
 				uni.setStorageSync('loadAllArray', loadArray);
 				if (uni.getStorageSync('loadAllArray').length == 0) {
 					uni.hideLoading();

@@ -266,7 +266,8 @@
 				userData:{},
 				willId:'',
 				willIndex:-1,
-				noClick:false
+				noClick:false,
+				
 			}
 		},
 		
@@ -334,11 +335,10 @@
 				uni.getLocation({
 				    type: 'wgs84',
 				    success: function (res) {
-						console.log('222',res)
+						
 						self.melongitude = res.longitude;
 						self.melatitude = res.latitude;
-				        console.log('当前位置的经度：' + res.longitude);
-				        console.log('当前位置的纬度：' + res.latitude);
+				       
 						self.userInfoUpdate()
 						self.getMainData(true)
 						uni.setStorageSync('intervalId', self.interval)
@@ -385,6 +385,10 @@
 			
 			confirm(index) {
 				const self = this;
+				if(!self.canConfirm){
+					return
+				};
+				self.canConfirm = false;
 				var now = Date.parse(new Date())/1000;
 				const postData = {};
 				postData.tokenFuncName = 'getRiderToken';
@@ -477,16 +481,19 @@
 					thirdapp_id:2,
 				};
 				postData.tokenFuncName = 'getRiderToken';
+				postData.noShowLoading = true;
 				const callback = (res) => {
 					if (res.solely_code == 100000 && res.info.data[0]) {
 						self.userData = res.info.data[0];
 						if(self.userData.is_work==1){
 							self.searchItem.city_id = self.userData.city_id;
-							//self.$Utils.finishFunc('getUserInfoData');
+							
 							self.interval = setInterval(function() {
 								self.getLocation()
 							}, 30000);
 							self.getLocation()
+							
+							//self.$Utils.finishFunc('getUserInfoData');
 						}else{
 							clearInterval(self.interval)
 							self.$Utils.finishFunc('getUserInfoData');
@@ -523,11 +530,11 @@
 				if(self.current==1){
 					postData.searchItem.invalid_time = ['>',now];
 				};
-				console.log('23',postData)
+				
 				const callback = (res) => {
 					self.noClick = false;
 					if(res.solely_code==100000){
-						console.log('22',res)
+						
 						if (res.info.data.length > 0) {
 							for (var i = 0; i < res.info.data.length; i++) {
 								res.info.data[i].min = parseInt((parseInt(res.info.data[i].invalid_time) - parseInt(now))/60);
@@ -538,22 +545,23 @@
 							self.mainData.push.apply(self.mainData, res.info.data);
 						};
 					}else{
+						console.log('res',res)
+						clearInterval(uni.getStorageSync('intervalId'));
+						uni.removeStorageSync('intervalId');
 						self.$Utils.showToast(res.msg, 'none')
 					};
 					uni.stopPullDownRefresh();
 					uni.hideLoading();
 					if(parseInt(res.info.total)>parseInt(uni.getStorageSync('number'))&&self.current==1){
 						self.checkTotal()
-						console.log('通知')
 					}
-					console.log('number',res.info.total)
+					
 					if(self.current==1){
-						console.log('add')
 						uni.setStorageSync('number',res.info.total)
 					}
 					self.$Utils.finishFunc('getUserInfoData');
-					console.log(234567)
-					
+					self.canConfirm = true;
+					console.log('self.interval',self.interval)
 				};
 				self.$apis.orderGet(postData, callback);
 			},

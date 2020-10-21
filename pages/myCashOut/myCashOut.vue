@@ -31,7 +31,7 @@
 					<input type="number" v-model="submitData.count" placeholder="请输入提现金额">
 				</div>
 				<div class="flexRowBetween fs12 color9">
-					<div>可提现金额{{userInfoData.balance}}元</div>
+					<div>可提现金额{{allCount1}}元</div>
 					<div class="fs14 pucolor" @click="allCount">全部提现</div>
 				</div>
 				
@@ -54,7 +54,8 @@
 				userInfoData:{},
 				submitData:{
 					count:''
-				}
+				},
+				allCount1:0
 			}
 		},
 		
@@ -62,7 +63,7 @@
 			const self = this;
 			self.type = options.type;
 			self.behavior = options.behavior;
-			
+			self.allCount1 = options.money;
 			console.log('self.behavior',self.behavior)
 			self.$Utils.loadAll(['getUserInfoData'], self);
 		},
@@ -76,7 +77,7 @@
 			
 			allCount(){
 				const self = this;
-				self.submitData.count = self.userInfoData.balance
+				self.submitData.count = self.allCount1
 			},
 			
 			submit() {
@@ -90,7 +91,7 @@
 				const pass = self.$Utils.checkComplete(self.submitData);
 				console.log('self.submitData',self.submitData)
 				if (pass) {
-					if(parseFloat(self.submitData.count)>parseFloat(self.userInfoData.balance)){
+					if(parseFloat(self.submitData.count)>parseFloat(self.allCount1)){
 						uni.setStorageSync('canClick', true);
 						self.$Utils.showToast('余额不足', 'none');
 						return
